@@ -7,14 +7,14 @@ import SignUpScreen from './SignUpScreen';
 
 function LoginScreen({ navigation }) {
 
-
     return (
-    <ImageBackground style={styles.background} source={require('../assets/background.jpg')}>
+    <View style={styles.background} >
 
-        <View style={styles.logoContainer}>
+        <Image style={styles.image} source={require('../assets/windowlogo.jpg')}/>
+        {/* <View style={styles.logoContainer}>
             <Image style={styles.logo} source={require('../assets/cocodonutslogo.png')} />
             <Text>Coco Donuts</Text>
-        </View>
+        </View> */}
 
         <TouchableOpacity style={styles.loginButton} onPress={() => console.log('TODO')}>
             <Text>Login</Text>
@@ -24,7 +24,7 @@ function LoginScreen({ navigation }) {
             <Text>Sign Up</Text>
         </TouchableOpacity>        
 
-    </ImageBackground>
+    </View>
     );
 }
 
@@ -34,7 +34,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-end',
         alignItems: 'center'
-    },    
+    }, 
+    image: {
+        flex:1,
+        resizeMode: 'contain'
+    },
     loginButton: {
         width: '100%',
         height: 70,

@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 
-function PromotionsScreen() {
+function AboutRewardsScreen() {
     return (
         <View style={styles.container}>
-            <Text> PROMOTIONS SCREEN </Text>
+            <Text> Info About Rewards System </Text>
         </View>
     );
 }
@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-      },
+    }
 
 })
 
-export default PromotionsScreen;
+export default AboutRewardsScreen;
