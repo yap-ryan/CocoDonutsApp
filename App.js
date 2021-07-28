@@ -15,6 +15,7 @@ import AccountScreen from './app/screens/AccountScreen';
 import CouponScreen from './app/screens/CouponScreen';
 import AboutRewardsScreen from './app/screens/AboutRewardsScreen';
 import LoadingScreen from './app/screens/LoadingScreen';
+import { AuthContext } from './app/shared/AuthContext';
 
 const HomeStackScreen = () => {
 
