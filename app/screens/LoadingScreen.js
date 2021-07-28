@@ -1,11 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-
-export default function AboutRewardsScreen() {
+export default function LoadingScreen() {
     return (
         <View style={styles.container}>
-            <Text> Info About Rewards System </Text>
+            <Text>Loading...</Text>
         </View>
     );
 }
