@@ -17,27 +17,73 @@ import AboutRewardsScreen from './app/screens/AboutRewardsScreen';
 import LoadingScreen from './app/screens/LoadingScreen';
 import { AuthContext } from './app/shared/AuthContext';
 
+
+const HomeStack = createStackNavigator()
 const HomeStackScreen = () => {
-
-  const HomeStack = createStackNavigator()
-
   return(
   <HomeStack.Navigator>
-    <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-    <HomeStack.Screen name="Coupons" component={CouponScreen} />
-    <HomeStack.Screen name="AboutRewards" component={AboutRewardsScreen} options={{ title:"About Rewards" }} />
+    <HomeStack.Screen name="Home" component={HomeScreen} 
+      options={{ headerShown: false, animationEnabled: false }} />
+    <HomeStack.Screen name="Coupons" component={CouponScreen} 
+      options={{ animationEnabled: false }}/>
+    <HomeStack.Screen name="AboutRewards" component={AboutRewardsScreen} 
+      options={{ title:"About Rewards", animationEnabled: false }} />
   </HomeStack.Navigator>
   )
 }
 
+const AuthStack = createStackNavigator()
+const AuthStackScreen = () => {
+  return(
+    <AuthStack.Navigator>
+      <AuthStack.Screen name="Login" component={LoginScreen} 
+        options={{ headerShown: false }} />
+      <AuthStack.Screen name="SignUpScreen" component={SignUpScreen} 
+        options={{ title:"Sign Up", animationEnabled: false }}/>
+    </AuthStack.Navigator>
+  )
+}
+
+const Tabs = createBottomTabNavigator()
+const TabsScreen = () => {
+  return (
+    <Tabs.Navigator tabBarOptions={{ activeTintColor: '#feadd6' }}
+      initialRouteName='Home'>
+      <Tabs.Screen name="Home" component={HomeStackScreen} options={{
+        tabBarIcon: () => (
+          <Icon name="home" color="#feadd6" size={25} />
+        )
+      }}/>
+      <Tabs.Screen name="Game" component={GameScreen} />
+      <Tabs.Screen name="Account" component={AccountScreen} />
+    </Tabs.Navigator>
+  )
+}
+
+const RootStack = createStackNavigator()
+const RootStackScreen = ({ userToken }) => {
+  return (
+    <RootStack.Navigator headerMode='none'>
+      {/* If there is a userToken (already logged in) render
+        main app Tab Navigation Screens else render Authentication Stack*/}
+      { userToken ? (
+        <RootStack.Screen name='App' component={TabsScreen} />
+      ) : (
+        <RootStack.Screen name='Auth' component={AuthStackScreen}/>
+      )}
+    </RootStack.Navigator>
+  )
+}
+
+
 export default function App() {
 
-  const AuthStack = createStackNavigator()
-  const Tabs = createBottomTabNavigator()
-
+  // Authentication and Loading states
   const [isLoading, setIsLoading] = React.useState(true)
   const [userToken, setUserToken] = React.useState(null)
 
+  // TODO: CONNECT FUNCTIONS TO BACKEND
+  // Memoize functions so we dont re-run functions on every render
   const authContext = React.useMemo(() => {
     return {
       logIn: () => {
@@ -54,7 +100,7 @@ export default function App() {
       }
     }
   }, [])
-
+  
   // Code to simulate loding time ie. waiting for authentication
   React.useEffect( () => {
     setTimeout(() => {
@@ -67,30 +113,11 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      
-      {/* If there is a userToken (already logged in) render
-      main Tab Navigation Screens else render Authentication Stack*/}
-      { userToken ? (
-        <Tabs.Navigator 
-          tabBarOptions={{
-          activeTintColor: '#feadd6',
-        }}>
-          <Tabs.Screen name="Home" component={HomeStackScreen} options={{
-            tabBarIcon: () => (
-              <Icon name="home" color="#feadd6" size={25} />
-            ),
-          }}/>
-          <Tabs.Screen name="Game" component={GameScreen} />
-          <Tabs.Screen name="Account" component={AccountScreen} />
-        </Tabs.Navigator>
-      ) : (
-        <AuthStack.Navigator>
-            <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-            <AuthStack.Screen name="SignUpScreen" component={SignUpScreen} options={{ title:"Sign Up" }}/>
-        </AuthStack.Navigator>
-      )}
-    </NavigationContainer> 
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        <RootStackScreen userToken={userToken}/>
+      </NavigationContainer> 
+    </AuthContext.Provider>
   );
 }
 

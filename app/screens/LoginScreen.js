@@ -4,8 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import SignUpScreen from './SignUpScreen';
+import { AuthContext } from '../shared/AuthContext'
 
 function LoginScreen({ navigation }) {
+
+    const { logIn } = React.useContext(AuthContext)
 
     return (
     <View style={styles.background} >
@@ -16,7 +19,7 @@ function LoginScreen({ navigation }) {
             <Text>Coco Donuts</Text>
         </View> */}
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => console.log('TODO')}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => logIn()}>
             <Text>Login</Text>
         </TouchableOpacity>
 
