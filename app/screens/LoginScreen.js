@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { TouchableOpacity, ImageBackground, StyleSheet, View, Image, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -20,11 +21,11 @@ function LoginScreen({ navigation }) {
         </View> */}
 
         <TouchableOpacity style={styles.loginButton} onPress={() => logIn()}>
-            <Text>Login</Text>
+            <Text style={styles.text}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.push('SignUpScreen')}>
-            <Text>Sign Up</Text>
+            <Text style={styles.text}>Sign Up</Text>
         </TouchableOpacity>        
 
     </View>
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         flex: 1  ,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
     }, 
     image: {
         flex:1,
@@ -66,7 +67,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         justifyContent: 'center',
         alignItems: 'center'
+
     }, 
+    text: {
+        fontFamily: 'DMSans-Medium',
+        fontSize: 18
+    }
 
 })
 

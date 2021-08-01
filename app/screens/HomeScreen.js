@@ -1,23 +1,24 @@
+import react from 'react';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 
-
 function HomeScreen({ navigation }) {
+    
     return (
 
-        <ImageBackground source={require('../assets/dozendonuts.png')}blurRadius={1.5} style={styles.background}>
+        <ImageBackground source={require('../assets/dozendonuts.png')} blurRadius={1.5} style={styles.background}>
 
             <View style={styles.contentContainer}>
-                <Text> HOME SCREEN </Text>
+                <Text style={styles.text}> HOME SCREEN </Text>
             </View>
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={[styles.button, {backgroundColor: '#ffffff'}]} onPress={() => navigation.push('Coupons')}>
-                        <Text>My Coupons</Text>
+                        <Text style={styles.text}>My Coupons</Text>
                     </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={() => navigation.push('AboutRewards')}>
-                    <Text>Learn about Coco Donuts Rewards</Text>
+                    <Text style={styles.text}>Learn about Coco Donuts Rewards</Text>
                 </TouchableOpacity>
             </View>
 
@@ -50,6 +51,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     }, 
+    text: {
+        fontFamily: 'DMSans-Medium',
+        fontSize: 16
+    }
 
 })
 

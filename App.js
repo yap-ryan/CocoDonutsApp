@@ -1,11 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
+import { Asset } from 'expo-asset';
+import AppLoading from 'expo-app-loading';
+import * as Font from 'expo-font';
 import React  from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 
 import LoginScreen from './app/screens/LoginScreen';
 import SignUpScreen from './app/screens/SignUpScreen';
@@ -16,6 +18,7 @@ import CouponScreen from './app/screens/CouponScreen';
 import AboutRewardsScreen from './app/screens/AboutRewardsScreen';
 import LoadingScreen from './app/screens/LoadingScreen';
 import { AuthContext } from './app/shared/AuthContext';
+
 
 
 const HomeStack = createStackNavigator()
@@ -47,13 +50,18 @@ const AuthStackScreen = () => {
 const Tabs = createBottomTabNavigator()
 const TabsScreen = () => {
   return (
-    <Tabs.Navigator tabBarOptions={{ activeTintColor: '#feadd6' }}
-      initialRouteName='Home'>
+    <Tabs.Navigator initialRouteName='Home' 
+      tabBarOptions={{
+        labelStyle: {
+          ...styles.navtext
+        },
+        activeTintColor: '#feadd6',
+      }}>
       <Tabs.Screen name="Home" component={HomeStackScreen} options={{
-        tabBarIcon: () => (
-          <Icon name="home" color="#feadd6" size={25} />
+        tabBarIcon: ({ focused} ) => (
+          <Icon name="home" size={25} color={focused ? '#feadd6' : 'gray'} />
         )
-      }}/>
+        }}/>
       <Tabs.Screen name="Game" component={GameScreen} />
       <Tabs.Screen name="Account" component={AccountScreen} />
     </Tabs.Navigator>
@@ -82,6 +90,7 @@ export default function App() {
   const [isLoading, setIsLoading] = React.useState(true)
   const [userToken, setUserToken] = React.useState(null)
 
+
   // TODO: CONNECT FUNCTIONS TO BACKEND
   // Memoize functions so we dont re-run functions on every render
   const authContext = React.useMemo(() => {
@@ -100,18 +109,39 @@ export default function App() {
       }
     }
   }, [])
-  
-  // Code to simulate loding time ie. waiting for authentication
-  React.useEffect( () => {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-  }, [])
 
-  if (isLoading) {
-    return <LoadingScreen />
+
+  // Cache all assets when loading app initially
+  const _cacheAssetsAsync = async () => {
+    const images = [require('./app/assets/dozendonuts.png'), 
+      require('./app/assets/windowlogo.jpg')
+    ]
+
+    const cachedImages = images.map(image => {
+      return Asset.fromModule(image).downloadAsync()
+    })
+
+    const fonts = [
+      {'DMSans-Bold': require('./app/assets/fonts/DMSans-Bold.ttf')},
+      {'DMSans-Medium': require('./app/assets/fonts/DMSans-Medium.ttf')},
+      {'DMSans-Regular': require('./app/assets/fonts/DMSans-Regular.ttf')}
+    ]
+
+    const cachedFonts = fonts.map(font => Font.loadAsync(font))
+
+    return await Promise.all([...cachedImages,...cachedFonts])
   }
 
+
+  // Asynchronously cache assets and set load state to false when done
+  if (isLoading) {
+    return <AppLoading 
+      startAsync={_cacheAssetsAsync}
+      onFinish={() => setIsLoading(false)}
+      onError={console.warn}
+    />
+  }
+  
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
@@ -127,4 +157,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  navtext: {
+    fontFamily: 'DMSans-Regular',
+    fontSize: 12,
+    padding: 1
+  }
 });
