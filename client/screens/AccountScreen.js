@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { AuthContext } from '../shared/AuthContext'
+import { AuthContext } from '../components/AuthContext'
 
 function AccountScreen() {
 
@@ -9,7 +9,7 @@ function AccountScreen() {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.signOutButton} onPress={() => logOut()}>
-                <Text>Log Out of Account</Text>
+                <Text style={styles.text} >Log Out of Account</Text>
             </TouchableOpacity>   
         </View>
     );
@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    text: {
+        fontFamily: 'DMSans-Medium',
+        fontSize: 16
     }
 
 })

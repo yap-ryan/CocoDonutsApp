@@ -4,12 +4,12 @@ import { TouchableOpacity, ImageBackground, StyleSheet, View, Image, Text, Butto
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
-import { AuthContext } from '../shared/AuthContext'
+import { AuthContext } from '../components/AuthContext'
 
-function LoginScreen({ navigation }) {
+function WelcomeScreen({ navigation }) {
 
-    const { logIn } = React.useContext(AuthContext)
 
     return (
     <View style={styles.background} >
@@ -20,12 +20,12 @@ function LoginScreen({ navigation }) {
             <Text>Coco Donuts</Text>
         </View> */}
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => logIn()}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.push('LoginScreen')}>
             <Text style={styles.text}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.push('SignUpScreen')}>
-            <Text style={styles.text}>Sign Up</Text>
+            <Text style={styles.text}>No account? Sign Up Here</Text>
         </TouchableOpacity>        
 
     </View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     signUpButton: {
         width: '100%',
-        height: 70,
+        height: 45,
         backgroundColor: '#fafafa',
         justifyContent: 'center',
         alignItems: 'center'
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default LoginScreen;
+export default WelcomeScreen;

@@ -9,16 +9,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
-import LoginScreen from './app/screens/LoginScreen';
-import SignUpScreen from './app/screens/SignUpScreen';
-import HomeScreen from './app/screens/HomeScreen';
-import GameScreen from './app/screens/GameScreen';
-import AccountScreen from './app/screens/AccountScreen';
-import CouponScreen from './app/screens/CouponScreen';
-import AboutRewardsScreen from './app/screens/AboutRewardsScreen';
-import LoadingScreen from './app/screens/LoadingScreen';
-import { AuthContext } from './app/shared/AuthContext';
-
+import WelcomeScreen from './screens/WelcomeScreen';
+import LoginScreen from './screens/LoginScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import HomeScreen from './screens/HomeScreen';
+import GameScreen from './screens/GameScreen';
+import AccountScreen from './screens/AccountScreen';
+import CouponScreen from './screens/CouponScreen';
+import AboutRewardsScreen from './screens/AboutRewardsScreen';
+import LoadingScreen from './screens/LoadingScreen';
+import { AuthContext } from './components/AuthContext';
 
 
 const HomeStack = createStackNavigator()
@@ -39,8 +39,10 @@ const AuthStack = createStackNavigator()
 const AuthStackScreen = () => {
   return(
     <AuthStack.Navigator>
-      <AuthStack.Screen name="Login" component={LoginScreen} 
+      <AuthStack.Screen name="WelcomeScreen" component={WelcomeScreen} 
         options={{ headerShown: false }} />
+      <AuthStack.Screen name="LoginScreen" component={LoginScreen} 
+        options={{ title:"Login", animationEnabled: false }} />
       <AuthStack.Screen name="SignUpScreen" component={SignUpScreen} 
         options={{ title:"Sign Up", animationEnabled: false }}/>
     </AuthStack.Navigator>
@@ -59,11 +61,19 @@ const TabsScreen = () => {
       }}>
       <Tabs.Screen name="Home" component={HomeStackScreen} options={{
         tabBarIcon: ({ focused} ) => (
-          <Icon name="home" size={25} color={focused ? '#feadd6' : 'gray'} />
+          <Icon name="home" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
         )
         }}/>
-      <Tabs.Screen name="Game" component={GameScreen} />
-      <Tabs.Screen name="Account" component={AccountScreen} />
+      <Tabs.Screen name="Game" component={GameScreen} options={{
+        tabBarIcon: ({ focused} ) => (
+          <Icon name="game-controller" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
+        )
+        }}/>
+      <Tabs.Screen name="Account" component={AccountScreen} options={{
+        tabBarIcon: ({ focused} ) => (
+          <Icon name="person-circle" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
+        )
+        }}/>
     </Tabs.Navigator>
   )
 }
@@ -113,8 +123,8 @@ export default function App() {
 
   // Cache all assets when loading app initially
   const _cacheAssetsAsync = async () => {
-    const images = [require('./app/assets/dozendonuts.png'), 
-      require('./app/assets/windowlogo.jpg')
+    const images = [require('./assets/dozendonuts.png'), 
+      require('./assets/windowlogo.jpg')
     ]
 
     const cachedImages = images.map(image => {
@@ -122,9 +132,9 @@ export default function App() {
     })
 
     const fonts = [
-      {'DMSans-Bold': require('./app/assets/fonts/DMSans-Bold.ttf')},
-      {'DMSans-Medium': require('./app/assets/fonts/DMSans-Medium.ttf')},
-      {'DMSans-Regular': require('./app/assets/fonts/DMSans-Regular.ttf')}
+      {'DMSans-Bold': require('./assets/fonts/DMSans-Bold.ttf')},
+      {'DMSans-Medium': require('./assets/fonts/DMSans-Medium.ttf')},
+      {'DMSans-Regular': require('./assets/fonts/DMSans-Regular.ttf')}
     ]
 
     const cachedFonts = fonts.map(font => Font.loadAsync(font))
