@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import { Octicons, Ionicons } from 'react-native-vector-icons';
 
@@ -31,8 +31,21 @@ const { darkLight, brand } = Colors;
 
 function LoginScreen({ navigation }) {
 
+    const [message, setMessage] = React.useState();
+    const [messageType, setMessageType] = React.useState()
     const [hidePassword, setHidePassword] = React.useState(true);
     const { logIn } = React.useContext(AuthContext)
+
+    // TODO: Communicate w/ backend to validate
+    const handleLogin = (credentials, setSubmitting) => {
+        handleMessage(null)
+        logIn()
+    }
+
+    const handleMessage = (message, type = '') => {
+        setMessage(message)
+        setMessageType(type)
+      }
 
     return (
         <KeyboardAvoidingWrapper>
@@ -40,9 +53,16 @@ function LoginScreen({ navigation }) {
         <InnerContainer>
             <Formik 
               initialValues={{ email: '', password: '' }}
-              onSubmit={values => console.log(values)}
-              >
-                {({ handleChange, handleBlur, handleSubmit, values }) => ( 
+              onSubmit={(values, { setSubmitting }) => {
+                if (values.email == '' || values.password == '') {
+                    handleMessage('Please fill in all fields');
+                    setSubmitting(false);
+                } else {
+                    handleLogin(values, setSubmitting);
+                }
+               }}
+            >
+                {({ handleChange, handleBlur, handleSubmit, isSubmitting, values }) => ( 
                 <StyledFormArea>
                     <MyTextInput
                         placeholder="Email"
@@ -66,14 +86,21 @@ function LoginScreen({ navigation }) {
                         setHidePassword={setHidePassword}
                     />
                     
-                    <View style={{paddingTop: 20}} > 
-                        {/* TODO: handleSubmit HERE */}
-                        <StyledButton onPress={() => logIn()}>
-                            <ButtonText style={styles.text}>
-                                Submit
-                            </ButtonText>
+                    <MsgBox type={messageType}>{message}</MsgBox>
+
+                    {!isSubmitting && (
+                        <StyledButton onPress={handleSubmit}>
+                        <ButtonText style={styles.text}>
+                            Submit
+                        </ButtonText>
+                    </StyledButton>
+                    )}
+                    {isSubmitting && (
+                        <StyledButton disabled={true}>
+                            <ActivityIndicator size="large" color={brand} />
                         </StyledButton>
-                    </View>
+                    )}
+                    
                     <Line />
                     <ExtraView>
                         <ExtraText style={styles.smallText}>Don't have an account? </ExtraText>
