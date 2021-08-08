@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     signUpButton: {
         width: '100%',
-        height: 45,
+        height: 70,
         backgroundColor: '#fafafa',
         justifyContent: 'center',
         alignItems: 'center'

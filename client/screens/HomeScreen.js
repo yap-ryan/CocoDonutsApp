@@ -5,10 +5,10 @@ function HomeScreen({ navigation }) {
     
     return (
 
-        <ImageBackground source={require('../assets/dozendonuts.png')} blurRadius={1.5} style={styles.background}>
+        <ImageBackground source={require('../assets/dozendonuts-blurred.png')} style={styles.background}>
 
             <View style={styles.contentContainer}>
-                <Text style={styles.text}> HOME SCREEN </Text>
+                <Text style={styles.text}> HOME SCREEN (WIP) </Text>
             </View>
 
             <View style={styles.buttonsContainer}>

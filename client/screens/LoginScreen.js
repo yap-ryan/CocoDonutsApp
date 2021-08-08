@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
 import { Formik } from 'formik';
 import { Octicons, Ionicons } from 'react-native-vector-icons';
 
@@ -86,7 +86,7 @@ function LoginScreen({ navigation }) {
                         setHidePassword={setHidePassword}
                     />
                     
-                    <MsgBox type={messageType}>{message}</MsgBox>
+                    <MsgBox style={{ fontFamily: 'DMSans-Regular' }} type={messageType}>{message}</MsgBox>
 
                     {!isSubmitting && (
                         <StyledButton onPress={handleSubmit}>

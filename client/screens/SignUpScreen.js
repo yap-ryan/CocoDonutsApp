@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
 import { AuthContext } from '../components/AuthContext'
 
 import { Formik } from 'formik';
@@ -118,7 +118,7 @@ function SignUpScreen({ navigation }) {
                   hidePassword={hidePassword}
                   setHidePassword={setHidePassword}
                 />
-                <MsgBox type={messageType}>{message}</MsgBox>
+                <MsgBox style={{ fontFamily: 'DMSans-Regular' }} type={messageType}>{message}</MsgBox>
 
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>

@@ -42,9 +42,9 @@ const AuthStackScreen = () => {
       <AuthStack.Screen name="WelcomeScreen" component={WelcomeScreen} 
         options={{ headerShown: false }} />
       <AuthStack.Screen name="LoginScreen" component={LoginScreen} 
-        options={{ title:"Login", animationEnabled: false }} />
+        options={{ title:"Login", headerBackTitle:"Back", animationEnabled: false }} />
       <AuthStack.Screen name="SignUpScreen" component={SignUpScreen} 
-        options={{ title:"Sign Up", animationEnabled: false }}/>
+        options={{ title:"Sign Up", headerBackTitle:"Back", animationEnabled: false }}/>
     </AuthStack.Navigator>
   )
 }
