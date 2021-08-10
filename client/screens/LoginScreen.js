@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
 import { Formik } from 'formik';
 import { Octicons, Ionicons } from 'react-native-vector-icons';
+import axios from 'axios';
 
 import { AuthContext } from '../components/AuthContext'
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
