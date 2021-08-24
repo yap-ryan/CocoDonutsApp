@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
  
-const PORT = 9000
+const PORT = process.env.PORT || 9000
 
 // Initialize http server
 const app = express()

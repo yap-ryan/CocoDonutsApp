@@ -36,7 +36,7 @@ router.get('/:id', async (req,res) => {
     }
 })
 
-// Handle Post requests
+// Handle Signup Post requests
 router.post('/signup', async (req,res) => {
     let {name, email, password} = req.body
 
@@ -66,20 +66,21 @@ router.post('/signup', async (req,res) => {
         // Check if user already exists before posting
         try{    
             const user = await User.find({email})
-            if (user.length != 0) {
+            if (user.length > 0) { // If user exists
                 res.status(500).json({    
                     message: 'Server Error: User with provided email already exists'
                 })
             } else {
                 try {
                     //Everything went well! Hash provided password
-                    const hashedPassword = await bcrypt.hash(password, 10)
+                    const hashedPassword = await bcrypt.hash(password, 10) 
 
                     const newUser = new User(
                         {
                             name,
                             email,
-                            password: hashedPassword
+                            password: hashedPassword,
+                            points: 0
                         }
                     )
 
@@ -100,25 +101,67 @@ router.post('/signup', async (req,res) => {
                     res.status(500).json({ 
                         message: 'Server Error while hashing password' 
                     })
-                    console.log(err)
+                    console.error(err)
                 }
 
             }
 
         } catch (err) {
             res.status(500).json({ message: 'Server Error while checking for existing user' })
-            console.log(err)
+            console.error(err)
+        }
+    }  
+})
+
+// Handle Login Post Requests
+router.post('/login', async (req,res) => {
+    let {email, password} = req.body
+
+    email = email.trim()
+    password = password.trim()
+
+    if (email == "" || password == "") {
+        res.status(500).json({
+            message: 'Server Error: Empty input field'
+        })
+    } else {
+        try {
+            const user = await User.find({email})
+            if(user.length) {// If user exists
+                const hashedPassword = user[0].password
+
+                try {
+                    const passwordsMatch = await bcrypt.compare(password, hashedPassword)
+
+                    if (passwordsMatch) {
+                        res.status(200).json({
+                            message: "Login Successful",
+                            data: user
+                        })
+                    } else {
+                        res.status(500).json({
+                            message: "Server Error: Invalid password entered",
+                        })
+                    }
+                } catch (err) {
+                    res.status(200).json({
+                        message: "Server Error: Error while comparing passwords"
+                    })
+                }
+            } else {
+                res.status(500).json({
+                    message: "Server Error: Emailed entered does not exist"
+                })
+            }
+
+        } catch (err) {
+            res.status(500).json({ message: 'Server Error while checking for existing user' })
+            console.error(err)
         }
 
-
-
     }
-
-    
-
-   
-
 })
+
 
 // Handle Patch requests
 router.patch('/:id', async (req,res) => {
@@ -136,7 +179,13 @@ router.patch('/:id', async (req,res) => {
         if (req.body.email != null && req.body.email != user.email){
             user.email = req.body.email 
             valueChanged = true
-        }    
+        }   
+        
+        // Only patch points if the points will change & not null
+        if (req.body.points != null && req.body.points != user.points){
+            user.points = req.body.points 
+            valueChanged = true
+        }
         
         // Only save change if a value is changed (prevent redundant db queries)
         if (valueChanged) {
