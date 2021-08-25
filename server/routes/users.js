@@ -17,7 +17,8 @@ router.get('/', async (req,res) => {
         console.log('Get (all users) Success')
 
     } catch(err) {
-        res.status(500).json({ message: 'Server Error' })
+        res.json({
+            status: 'ERROR', message: 'Server Error' })
         console.error(err)
     }
 })
@@ -31,7 +32,8 @@ router.get('/:id', async (req,res) => {
         console.log('Get Success')
 
     } catch(err) {
-        res.status(500).json({ message: 'Server Error' })
+        res.json({
+            status: 'ERROR', message: 'Server Error' })
         console.error(err)
     }
 })
@@ -47,19 +49,23 @@ router.post('/signup', async (req,res) => {
 
     // Conditions for user info before posting new user
     if (name == '' || email == '' || password == '' ) {
-        res.status(500).json({
+        res.json({
+            status: 'ERROR',
             message: 'Server Error: Empty input field'
         })
     } else if (! /^[a-zA-Z ]*$/.test(name)) {
-        res.status(500).json({
+        res.json({
+            status: 'ERROR',
             message: 'Server Error: Invalid name entered'
         })
     } else if (! /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
-        res.status(500).json({
+        res.json({
+            status: 'ERROR',
             message: 'Server Error: Invalid email entered'
         })
     } else if (password.length < 8) {
-        res.status(500).json({
+        res.json({
+            status: 'ERROR',
             message: 'Server Error: Password too short'
         })
     } else {
@@ -67,7 +73,8 @@ router.post('/signup', async (req,res) => {
         try{    
             const user = await User.find({email})
             if (user.length > 0) { // If user exists
-                res.status(500).json({    
+                res.json({
+                    status: 'ERROR',    
                     message: 'Server Error: User with provided email already exists'
                 })
             } else {
@@ -87,18 +94,21 @@ router.post('/signup', async (req,res) => {
                     // Save new user to db
                     try{    
                         const result = await newUser.save()
-                        res.status(200).json({
+                        res.json({
+                            status: 'SUCCESS',
                             message: 'Sign-up Successful',
                             data: result
                         })
                         console.log('Sign-up Success')
                     } catch(err){
-                        res.status(500).json({ message: 'Server Error: Could not save user to db on signup' })
+                        res.json({
+                            status: 'ERROR', message: 'Server Error: Could not save user to db on signup' })
                         console.error(err)                
                     }
 
                 } catch (err) {
-                    res.status(500).json({ 
+                    res.json({
+                        status: 'ERROR', 
                         message: 'Server Error while hashing password' 
                     })
                     console.error(err)
@@ -107,7 +117,8 @@ router.post('/signup', async (req,res) => {
             }
 
         } catch (err) {
-            res.status(500).json({ message: 'Server Error while checking for existing user' })
+            res.json({
+                status: 'ERROR', message: 'Server Error while checking for existing user' })
             console.error(err)
         }
     }  
@@ -121,7 +132,8 @@ router.post('/login', async (req,res) => {
     password = password.trim()
 
     if (email == "" || password == "") {
-        res.status(500).json({
+        res.json({
+            status: 'ERROR',
             message: 'Server Error: Empty input field'
         })
     } else {
@@ -134,28 +146,35 @@ router.post('/login', async (req,res) => {
                     const passwordsMatch = await bcrypt.compare(password, hashedPassword)
 
                     if (passwordsMatch) {
-                        res.status(200).json({
+                        res.json({
+                            status: 'SUCCESS',
                             message: "Login Successful",
                             data: user
                         })
+                        console.log('Login Success')
+
                     } else {
-                        res.status(500).json({
+                        res.json({
+                            status: 'ERROR',
                             message: "Server Error: Invalid password entered",
                         })
                     }
                 } catch (err) {
-                    res.status(200).json({
+                    res.json({
+                        status: 'ERROR',
                         message: "Server Error: Error while comparing passwords"
                     })
                 }
             } else {
-                res.status(500).json({
+                res.json({
+                    status: 'ERROR',
                     message: "Server Error: Emailed entered does not exist"
                 })
             }
 
         } catch (err) {
-            res.status(500).json({ message: 'Server Error while checking for existing user' })
+            res.json({
+                status: 'ERROR', message: 'Server Error while checking for existing user' })
             console.error(err)
         }
 
@@ -193,12 +212,13 @@ router.patch('/:id', async (req,res) => {
             res.json(a1)
             console.log('Patch/Update Successful')
         } else {
-            res.send('No Patch/Update: Values inputed identical to those in database')
+            res.json({message: 'No Patch/Update: Values inputed identical to those in database'})
             console.log('No Patch/Update: Values inputed identical to database')
         }
 
     } catch(err) {
-        res.status(500).json({ message: 'Server Error' })
+        res.json({
+            status: 'ERROR', message: 'Server Error' })
         console.error(err)
     }
 
@@ -209,10 +229,11 @@ router.delete('/:id', async (req,res) => {
     try {
         const user = await User.findById(req.params.id)
         const a1 = await user.delete()
-        res.send('User Deleted: \n' + a1)
+        res.json({message: 'User successfully deleted'})
         console.log('Delete Successful')
     } catch(err) {
-        res.status(500).json({ message: 'Server Error' })
+        res.json({
+            status: 'ERROR', message: 'Server Error' })
         console.error(err)
 
     }

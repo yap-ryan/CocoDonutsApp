@@ -38,12 +38,31 @@ function LoginScreen({ navigation }) {
     const { logIn } = React.useContext(AuthContext)
 
     // TODO: Communicate w/ backend to validate
-    const handleLogin = (credentials, setSubmitting) => {
-        handleMessage(null)
-        logIn()
+    const handleLogin = async (credentials, setSubmitting) => {
+        handleMessage(null) //Clear message
+
+        const url = 'https://coco-donuts-heroku.herokuapp.com/users/login'
+        
+        try {
+          let resp = await axios.post(url, credentials)
+
+          const {msg, status, data} = resp
+
+          if (status !== 'SUCCESS') {
+            handleMessage(msg, status)
+          } else {
+            console.log('LOGGED IN')
+            logIn()
+          }
+          setSubmitting(false)
+        } catch (err) {
+          setSubmitting(false)
+          handleMessage('An error occured connecting. Check your network and try again.')
+          console.error(err)
+        }
     }
 
-    const handleMessage = (message, type = '') => {
+    const handleMessage = (message, type = 'FAILED') => {
         setMessage(message)
         setMessageType(type)
       }
@@ -90,7 +109,7 @@ function LoginScreen({ navigation }) {
                     <MsgBox style={{ fontFamily: 'DMSans-Regular' }} type={messageType}>{message}</MsgBox>
 
                     {!isSubmitting && (
-                        <StyledButton onPress={handleSubmit}>
+                      <StyledButton onPress={handleSubmit}>
                         <ButtonText style={styles.text}>
                             Submit
                         </ButtonText>
