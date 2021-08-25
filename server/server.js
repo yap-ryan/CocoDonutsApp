@@ -3,11 +3,12 @@ const express = require('express')
 const mongoose = require('mongoose')
  
 const PORT = process.env.PORT || 9000
+const MONGODB_URI = process.env.MONGODB_URI || '0.0.0.0'
 
 // Initialize http server
 const app = express()
 
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser:true, useUnifiedTopology: true})
+mongoose.connect(MONGODB_URI, {useNewUrlParser:true, useUnifiedTopology: true})
 
 const db = mongoose.connection
 
