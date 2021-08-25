@@ -42,11 +42,11 @@ function LoginScreen({ navigation }) {
         handleMessage(null) //Clear message
 
         const url = 'https://coco-donuts-heroku.herokuapp.com/users/login'
-        
+        console.log('test')
         try {
           let resp = await axios.post(url, credentials)
 
-          const {msg, status, data} = resp
+          const {msg, status, data} = resp.data
 
           if (status !== 'SUCCESS') {
             handleMessage(msg, status)
