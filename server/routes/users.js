@@ -51,22 +51,22 @@ router.post('/signup', async (req,res) => {
     if (name == '' || email == '' || password == '' ) {
         res.json({
             status: 'ERROR',
-            message: 'Server Error: Empty input field'
+            message: 'Empty input field'
         })
     } else if (! /^[a-zA-Z ]*$/.test(name)) {
         res.json({
             status: 'ERROR',
-            message: 'Server Error: Invalid name entered'
+            message: 'Invalid name entered'
         })
     } else if (! /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
         res.json({
             status: 'ERROR',
-            message: 'Server Error: Invalid email entered'
+            message: 'Invalid email entered'
         })
     } else if (password.length < 8) {
         res.json({
             status: 'ERROR',
-            message: 'Server Error: Password too short'
+            message: 'Password too short'
         })
     } else {
         // Check if user already exists before posting
@@ -75,7 +75,7 @@ router.post('/signup', async (req,res) => {
             if (user.length > 0) { // If user exists
                 res.json({
                     status: 'ERROR',    
-                    message: 'Server Error: User with provided email already exists'
+                    message: 'User with provided email already exists'
                 })
             } else {
                 try {
@@ -102,7 +102,7 @@ router.post('/signup', async (req,res) => {
                         console.log('Sign-up Success')
                     } catch(err){
                         res.json({
-                            status: 'ERROR', message: 'Server Error: Could not save user to db on signup' })
+                            status: 'ERROR', message: 'Could not save user to db on signup' })
                         console.error(err)                
                     }
 
@@ -134,8 +134,9 @@ router.post('/login', async (req,res) => {
     if (email == "" || password == "") {
         res.json({
             status: 'ERROR',
-            message: 'Server Error: Empty input field'
+            message: 'Empty input field'
         })
+        console.log('Server Error: Empty input field')
     } else {
         try {
             const user = await User.find({email})
@@ -156,20 +157,24 @@ router.post('/login', async (req,res) => {
                     } else {
                         res.json({
                             status: 'ERROR',
-                            message: "Server Error: Invalid password entered",
+                            message: "Invalid password entered",
                         })
+                        console.log('Server Error: Invalid password entered')
                     }
                 } catch (err) {
                     res.json({
                         status: 'ERROR',
-                        message: "Server Error: Error while comparing passwords"
+                        message: "Error while comparing passwords"
                     })
+                    console.log('Server Error: Error while comparing passwords')
                 }
             } else {
                 res.json({
                     status: 'ERROR',
-                    message: "Server Error: Emailed entered does not exist"
+                    message: "Email entered does not exist"
                 })
+                console.log('Server Error: Email entered does not exist')
+
             }
 
         } catch (err) {

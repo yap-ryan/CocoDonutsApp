@@ -42,16 +42,15 @@ function LoginScreen({ navigation }) {
         handleMessage(null) //Clear message
 
         const url = 'https://coco-donuts-heroku.herokuapp.com/users/login'
-        console.log('test')
         try {
           const resp = await axios.post(url, credentials)
 
           const result = resp.data
-          const {msg, status, data} = result
+          const {message, status, data} = result
 
           if (status !== 'SUCCESS') {
             console.log('FAILED TO LOGGED IN')
-            handleMessage(msg, status)
+            handleMessage(message, status)
           } else {
             console.log('LOGGED IN')
             logIn()
@@ -80,7 +79,6 @@ function LoginScreen({ navigation }) {
                     handleMessage('Please fill in all fields')
                     setSubmitting(false)
                 } else {
-                    console.log('test1')
                     handleLogin(values, setSubmitting)
                 }
                }}
