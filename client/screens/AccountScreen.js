@@ -1,17 +1,32 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { AuthContext } from '../components/AuthContext'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { CredentialsContext } from '../components/CredentialsContext';
+
 
 function AccountScreen() {
 
-    const { logOut } = React.useContext(AuthContext)
+    const { setStoredCredentials } = React.useContext(CredentialsContext)
+
+    // Clear storedCredentials state and async storage on logout
+    const clearCredentialsOnLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('cocoAppCredentials')
+            setStoredCredentials(null)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     return (
+    <>
         <View style={styles.container}>
-            <TouchableOpacity style={styles.signOutButton} onPress={() => logOut()}>
+            <TouchableOpacity style={styles.signOutButton} onPress={() => clearCredentialsOnLogout()}>
                 <Text style={styles.text} >Log Out of Account</Text>
-            </TouchableOpacity>   
-        </View>
+            </TouchableOpacity> 
+        </View> 
+    </>
     );
 }
 

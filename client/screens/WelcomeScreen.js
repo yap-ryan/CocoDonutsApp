@@ -1,12 +1,6 @@
 import React from 'react';
-
 import { TouchableOpacity, ImageBackground, StyleSheet, View, Image, Text, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-import LoginScreen from './LoginScreen';
-import SignUpScreen from './SignUpScreen';
-import { AuthContext } from '../components/AuthContext'
+import { StatusBar } from 'expo-status-bar';
 
 function WelcomeScreen({ navigation }) {
 
@@ -26,7 +20,9 @@ function WelcomeScreen({ navigation }) {
 
         <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.push('SignUpScreen')}>
             <Text style={styles.text}>No account? Sign Up Here</Text>
-        </TouchableOpacity>        
+        </TouchableOpacity>  
+
+        <StatusBar style="light" />
 
     </View>
     );
@@ -45,7 +41,7 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         width: '100%',
-        height: 70,
+        height: 85,
         backgroundColor: '#feadd6',
         justifyContent: 'center',
         alignItems: 'center'
@@ -63,7 +59,7 @@ const styles = StyleSheet.create({
     },
     signUpButton: {
         width: '100%',
-        height: 70,
+        height: 85,
         backgroundColor: '#fafafa',
         justifyContent: 'center',
         alignItems: 'center'
@@ -71,7 +67,7 @@ const styles = StyleSheet.create({
     }, 
     text: {
         fontFamily: 'DMSans-Medium',
-        fontSize: 18
+        fontSize: 20
     }
 
 })

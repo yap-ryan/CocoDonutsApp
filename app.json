@@ -4,10 +4,10 @@
     "slug": "CocoDonutsApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./client/assets/icon.png",
+    "icon": "./client/assets/cocoicon1024.png",
     "splash": {
-      "image": "./client/assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./client/assets/cocosplash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -31,6 +31,6 @@
     "web": {
       "favicon": "./client/assets/favicon.png"
     },
-    "description": "Coco Donuts app for promotions & game"
+    "description": "Coco Donuts app for rewards & game"
   }
 }

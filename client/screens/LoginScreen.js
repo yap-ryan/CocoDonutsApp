@@ -1,10 +1,14 @@
+// Thirdy party imports
 import React from 'react';
-import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
+import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import { Octicons, Ionicons } from 'react-native-vector-icons';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
 
-import { AuthContext } from '../components/AuthContext'
+
+import { CredentialsContext } from '../components/CredentialsContext';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import {
     StyledContainer,
@@ -35,7 +39,7 @@ function LoginScreen({ navigation }) {
     const [message, setMessage] = React.useState();
     const [messageType, setMessageType] = React.useState()
     const [hidePassword, setHidePassword] = React.useState(true);
-    const { logIn } = React.useContext(AuthContext)
+    const {setStoredCredentials} = React.useContext(CredentialsContext)
 
     // TODO: Communicate w/ backend to validate
     const handleLogin = async (credentials, setSubmitting) => {
@@ -52,8 +56,8 @@ function LoginScreen({ navigation }) {
             console.log('FAILED TO LOGGED IN')
             handleMessage(message, status)
           } else {
-            console.log('LOGGED IN')
-            logIn()
+            console.log('LOGGED IN with credentials: ' + JSON.stringify({...data[0]}) + '\n')
+            presistLogin({...data[0]}, message, status)
           }
           setSubmitting(false)
         } catch (err) {
@@ -67,6 +71,17 @@ function LoginScreen({ navigation }) {
         setMessage(message)
         setMessageType(type)
       }
+
+    const presistLogin = async (credentials, message, status) => {
+      try {
+        await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+        handleMessage(message, status)
+        setStoredCredentials(credentials)
+      } catch (err) {
+        console.error(err)
+        handleMessage('Persisting login failed')
+      }
+    }
 
     return (
         <KeyboardAvoidingWrapper>
@@ -92,6 +107,7 @@ function LoginScreen({ navigation }) {
                         onBlur={handleBlur('email')}
                         value={values.email}
                         icon="mail"
+                        autoCapitalize='none'
                     />
 
                     <MyTextInput
@@ -118,7 +134,7 @@ function LoginScreen({ navigation }) {
                     )}
                     {isSubmitting && (
                         <StyledButton disabled={true}>
-                            <ActivityIndicator size="large" color={brand} />
+                            <ActivityIndicator size="large" animating={true} color={brand} />
                         </StyledButton>
                     )}
                     
@@ -132,6 +148,7 @@ function LoginScreen({ navigation }) {
                 </StyledFormArea>
                 )}
             </Formik>
+            <StatusBar style="dark" />
         </InnerContainer>
         </StyledContainer>
         </KeyboardAvoidingWrapper>

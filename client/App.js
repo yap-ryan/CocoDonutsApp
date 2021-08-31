@@ -1,5 +1,7 @@
+// Third Party imports
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Font from 'expo-font';
 import React  from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -7,8 +9,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { StatusBar } from 'expo-status-bar';
 
-
+// 'Stuff I made' imports
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -17,8 +20,8 @@ import GameScreen from './screens/GameScreen';
 import AccountScreen from './screens/AccountScreen';
 import CouponScreen from './screens/CouponScreen';
 import AboutRewardsScreen from './screens/AboutRewardsScreen';
-import LoadingScreen from './screens/LoadingScreen';
-import { AuthContext } from './components/AuthContext';
+import { CredentialsContext } from './components/CredentialsContext';
+
 
 
 const HomeStack = createStackNavigator()
@@ -79,17 +82,22 @@ const TabsScreen = () => {
 }
 
 const RootStack = createStackNavigator()
-const RootStackScreen = ({ userToken }) => {
+const RootStackScreen = () => {
   return (
-    <RootStack.Navigator headerMode='none'>
-      {/* If there is a userToken (already logged in) render
-        main app Tab Navigation Screens else render Authentication Stack*/}
-      { userToken ? (
-        <RootStack.Screen name='App' component={TabsScreen} />
-      ) : (
-        <RootStack.Screen name='Auth' component={AuthStackScreen}/>
+    <CredentialsContext.Consumer>
+      {({storedCredentials, setStoredCredentials}) => (
+        <RootStack.Navigator headerMode='none'>
+        {/* If there are storedCredentials (already logged in) render
+          main app Tab Navigation Screens else render Authentication Stack*/}
+        { storedCredentials ? (
+          <RootStack.Screen name='App' component={TabsScreen} />
+        ) : (
+          <RootStack.Screen name='Auth' component={AuthStackScreen}/>
+        )}
+      </RootStack.Navigator>
       )}
-    </RootStack.Navigator>
+    </CredentialsContext.Consumer>
+    
   )
 }
 
@@ -97,67 +105,77 @@ const RootStackScreen = ({ userToken }) => {
 export default function App() {
 
   // Authentication and Loading states
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [userToken, setUserToken] = React.useState(null)
-
-
-  // TODO: CONNECT FUNCTIONS TO BACKEND
-  // Memoize functions so we dont re-run functions on every render
-  const authContext = React.useMemo(() => {
-    return {
-      logIn: () => {
-        setIsLoading(false)
-        setUserToken('abc')
-      },
-      signUp: () => {
-        setIsLoading(false)
-        setUserToken('abc')
-      },
-      logOut: () => {
-        setIsLoading(false)
-        setUserToken(null)
-      }
-    }
-  }, [])
-
+  const [appReady, setAppReady] = React.useState(false)
+  const [storedCredentials, setStoredCredentials] = React.useState(null)
 
   // Cache all assets when loading app initially
   const _cacheAssetsAsync = async () => {
-    const images = [require('./assets/dozendonuts.png'), 
-      require('./assets/windowlogo.jpg')
-    ]
+    try {
+      const images = [require('./assets/dozendonuts.png'), 
+        require('./assets/windowlogo.jpg')
+      ]
 
-    const cachedImages = images.map(image => {
-      return Asset.fromModule(image).downloadAsync()
-    })
+      const cachedImages = images.map(image => {
+        return Asset.fromModule(image).downloadAsync()
+      })
 
-    const fonts = [
-      {'DMSans-Bold': require('./assets/fonts/DMSans-Bold.ttf')},
-      {'DMSans-Medium': require('./assets/fonts/DMSans-Medium.ttf')},
-      {'DMSans-Regular': require('./assets/fonts/DMSans-Regular.ttf')}
-    ]
+      const fonts = [
+        {'DMSans-Bold': require('./assets/fonts/DMSans-Bold.ttf')},
+        {'DMSans-Medium': require('./assets/fonts/DMSans-Medium.ttf')},
+        {'DMSans-Regular': require('./assets/fonts/DMSans-Regular.ttf')}
+      ]
 
-    const cachedFonts = fonts.map(font => Font.loadAsync(font))
+      const cachedFonts = fonts.map(font => Font.loadAsync(font))
 
-    return await Promise.all([...cachedImages,...cachedFonts])
+      return Promise.all([...cachedImages,...cachedFonts])
+    } catch (err) {
+      console.error(err)
+    }
   }
 
+  /** Check if login credentials already exist in async storage on client device
+  RUNS ON APP LOADING SCREEN */
+  const checkLoginCreds = async () => {
+    try {
+      const creds = await AsyncStorage.getItem('cocoAppCredentials')
+      if (creds !== null) {
+        console.log("Credentials in AsyncStorage found, will presist login with credentials: " + creds + '\n')
+        setStoredCredentials(JSON.parse(creds))
+      } else {
+        console.log("No credentials in AsyncStorage found")
+        setStoredCredentials(null)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  // List of functions to run ASYNCHRONOUSLY when app loading
+  const startAppLoading = async () => {
+    try {
+      await _cacheAssetsAsync()
+      await checkLoginCreds()
+    } catch (err) {
+      console.error('Error with app loading: \n' + err)
+    }
+  }
 
   // Asynchronously cache assets and set load state to false when done
-  if (isLoading) {
+  if (!appReady) {
     return <AppLoading 
-      startAsync={_cacheAssetsAsync}
-      onFinish={() => setIsLoading(false)}
+      startAsync={startAppLoading}
+      onFinish={() => setAppReady(true)}
       onError={console.warn}
     />
   }
   
   return (
-    <AuthContext.Provider value={authContext}>
+    <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials}}>
       <NavigationContainer>
-        <RootStackScreen userToken={userToken}/>
+        <RootStackScreen/>
+        <StatusBar style="auto" />
       </NavigationContainer> 
-    </AuthContext.Provider>
+    </CredentialsContext.Provider>
   );
 }
 
