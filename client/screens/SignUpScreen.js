@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios'
-import { Octicons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-
-
+// Datetimepicker
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { CredentialsContext } from '../components/CredentialsContext';
 import KeyboardAvoidingWrapper from './../components/KeyboardAvoidingWrapper';
@@ -40,6 +40,24 @@ function SignUpScreen({ navigation }) {
     const [messageType, setMessageType] = React.useState()
     const {setStoredCredentials} = React.useContext(CredentialsContext)
 
+    // Date (of Birth)
+    const [date, setDate] = React.useState(new Date(2000, 0, 1));
+    // State to show/hide date selector 
+    const [show, setShow] = React.useState(false);
+    // Actual Date of Birth value to be sent
+    const [dob, setDob] = React.useState();
+
+    // Handles when DateTimePicker changes
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+      setShow(false);
+      setDate(currentDate);
+      setDob(currentDate);
+    };
+
+    const showDatePicker = () => {
+      setShow(true);
+    };
 
     // TODO: Function to handle signup (talk to backend)
     const handleSignup = async (credentials, setSubmitting) => {
@@ -89,14 +107,31 @@ function SignUpScreen({ navigation }) {
     <KeyboardAvoidingWrapper>
     <StyledContainer>
     <InnerContainer>
+
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+            style={{
+              backgroundColor: 'yellow',
+            }}
+          />
+        )}
+
       <Formik
-        initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
+        initialValues={{ name: '', email: '', phone: '', dateOfBirth: '', password: '', confirmPassword: '' }}
         onSubmit={(values, { setSubmitting }) => {
             values = { ...values};
             if (
-              values.email == '' ||
-              values.password == '' ||
               values.name == '' ||
+              values.email == '' ||
+              values.phone == '' ||
+              values.dateOfBirth == '' ||
+              values.password == '' ||
               values.confirmPassword == ''
             ) {
               handleMessage('Please fill in all fields')
@@ -117,7 +152,7 @@ function SignUpScreen({ navigation }) {
               onChangeText={handleChange('name')}
               onBlur={handleBlur('name')}
               value={values.name}
-              icon="person"
+              icon="person-outline"
             />
             <MyTextInput
               placeholder="Email"
@@ -126,8 +161,29 @@ function SignUpScreen({ navigation }) {
               onBlur={handleBlur('email')}
               value={values.email}
               keyboardType="email-address"
-              icon="mail"
+              icon="mail-outline"
               autoCapitalize='none'
+            />
+            <MyTextInput
+              placeholder="Phone Number"
+              placeholderTextColor={darkLight}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              value={values.phone}
+              keyboardType="phone-pad"
+              icon="call-outline"
+              autoCapitalize='none'
+            />
+            <MyTextInput
+              placeholder="Birthday (for rewards!)"
+              placeholderTextColor={darkLight}
+              onChangeText={handleChange('dateOfBirth')}
+              onBlur={handleBlur('dateOfBirth')}
+              value={dob ? dob.toDateString() : ''}
+              icon="calendar-outline"
+              editable={false}
+              isDate={true}
+              showDatePicker={showDatePicker}
             />
             <MyTextInput
               placeholder="Password"
@@ -136,7 +192,7 @@ function SignUpScreen({ navigation }) {
               onBlur={handleBlur('password')}
               value={values.password}
               secureTextEntry={hidePassword}
-              icon="lock"
+              icon="lock-closed-outline"
               isPassword={true}
               hidePassword={hidePassword}
               setHidePassword={setHidePassword}
@@ -148,7 +204,7 @@ function SignUpScreen({ navigation }) {
               onBlur={handleBlur('confirmPassword')}
               value={values.confirmPassword}
               secureTextEntry={hidePassword}
-              icon="lock"
+              icon="lock-closed-outline"
               isPassword={true}
               hidePassword={hidePassword}
               setHidePassword={setHidePassword}
@@ -183,14 +239,22 @@ function SignUpScreen({ navigation }) {
     );
 }
 
-const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, isDate, showDatePicker, ...props }) => {
     return (
       <View>
         <LeftIcon>
-          <Octicons name={icon} size={30} color='black' />
+          {/* <Octicons name={icon} size={30} color='black' /> */}
+          <Ionicons name={icon} size={30} color='black' />
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>
-        <StyledTextInput {...props} />
+
+        {isDate && (
+          <TouchableOpacity onPress={showDatePicker}>
+            <StyledTextInput {...props} />
+          </TouchableOpacity>
+        )}
+        {!isDate && <StyledTextInput {...props} />}
+
         {isPassword && (
           <RightIcon
             onPress={() => {

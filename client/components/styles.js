@@ -20,7 +20,7 @@ const { primary, secondary, tertiary, darkLight, brand, green, red } = Colors;
 export const StyledContainer = styled.View`
   flex: 1;
   padding: 25px;
-  padding-top: 30px;
+  padding-top: 20px;
   background-color: ${Colors.primary};
 `;
 
@@ -106,7 +106,7 @@ export const StyledInputLabel = styled.Text`
 
 export const LeftIcon = styled.View`
   left: 15px;
-  top: 36px;
+  top: 35px;
   position: absolute;
   z-index: 1;
 `;

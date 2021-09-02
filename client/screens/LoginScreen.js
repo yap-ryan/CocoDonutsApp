@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
-import { Octicons, Ionicons } from 'react-native-vector-icons';
+import { Ionicons } from 'react-native-vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
@@ -106,7 +106,7 @@ function LoginScreen({ navigation }) {
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
                         value={values.email}
-                        icon="mail"
+                        icon="mail-outline"
                         autoCapitalize='none'
                     />
 
@@ -117,7 +117,7 @@ function LoginScreen({ navigation }) {
                         onBlur={handleBlur('password')}
                         value={values.password}
                         secureTextEntry={hidePassword}
-                        icon="lock"
+                        icon="lock-closed-outline"
                         isPassword={true}
                         hidePassword={hidePassword}
                         setHidePassword={setHidePassword}
@@ -159,7 +159,7 @@ const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
     return (
       <View>
         <LeftIcon>
-          <Octicons name={icon} size={30} color={'black'} />
+          <Ionicons name={icon} size={30} color='black' />
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>
         <StyledTextInput {...props} />

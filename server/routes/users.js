@@ -7,9 +7,6 @@ const User = require('../models/user')
 // Password hashing handler
 const bcrypt = require('bcrypt')
 
-// Input sanitizer against query selector injection attacks
-const sanitize = require('mongo-sanitize')
-
 // All requests should be async to prevent process blocking
 // Handle Get requests for ALL users
 router.get('/', async (req,res) => {
@@ -28,12 +25,9 @@ router.get('/', async (req,res) => {
 
 // Handle Get requests for individual users
 router.get('/:id', async (req,res) => {
-
-    const cleanId = sanitize(req.params.id)
-
     try{
         // Find user
-        const user = await User.findById(cleanId)
+        const user = await User.findById(req.params.id)
         res.json(user)
         console.log('Get Success')
 
@@ -52,7 +46,6 @@ router.post('/signup', async (req,res) => {
     email = email.trim().toLowerCase()
     phone = phone.trim()
     password = password.trim()
-
 
     // Conditions for user info before posting new user
     if (name == '' || email == '' || phone == '' || password == '' ) {
@@ -75,10 +68,10 @@ router.post('/signup', async (req,res) => {
             status: 'ERROR',
             message: 'Invalid phone number entered'
         })
-    } else if (password.length < 8 || password.length > 20) {
+    } else if (! /^(?!.*[$ ])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@%^&*-]).{8,20}$/.test(password)) {
         res.json({
             status: 'ERROR',
-            message: 'Password must be between 8 to 20 characters'
+            message: 'Password must have 1 upper case, 1 lower case, 1 digit, 1 special character (no $ or spaces), and be 8-20 chracters long'
         })
     } else {
         // Check if email and phone already being used before posting
@@ -149,7 +142,6 @@ router.post('/login', async (req,res) => {
     let {email, password} = req.body
 
     email = email.trim().toLowerCase()
-    password = password.trim()
 
     if (email == "" || password == "") {
         res.json({
@@ -266,11 +258,11 @@ router.delete('/:id', async (req,res) => {
     try {
         const user = await User.findById(req.params.id)
         const a1 = await user.delete()
-        res.json({message: 'User successfully deleted'})
-        console.log('Delete Successful')
+        res.json({message: 'User successfully deleted', data: a1})
+        console.log('Delete Successful for user: ' + a1)
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Server Error' })
+            status: 'ERROR', message: 'Server Error when trying to delete user' })
         console.error(err)
 
     }
