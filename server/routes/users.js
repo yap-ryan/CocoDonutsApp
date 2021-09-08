@@ -40,7 +40,7 @@ router.get('/:id', async (req,res) => {
 
 // Handle Signup Post requests
 router.post('/signup', async (req,res) => {
-    let {name, email, phone, password} = req.body
+    let {name, email, phone, birthday, password} = req.body
 
     name = name.trim()
     email = email.trim().toLowerCase()
@@ -48,7 +48,7 @@ router.post('/signup', async (req,res) => {
     password = password.trim()
 
     // Conditions for user info before posting new user
-    if (name == '' || email == '' || phone == '' || password == '' ) {
+    if (name == '' || email == '' || phone == '' || birthday == '' || password == '' ) {
         res.json({
             status: 'ERROR',
             message: 'Empty input field'
@@ -99,6 +99,7 @@ router.post('/signup', async (req,res) => {
                             name,
                             email,
                             phone,
+                            birthday: new Date(birthday),
                             password: hashedPassword,
                             points: 0
                         }

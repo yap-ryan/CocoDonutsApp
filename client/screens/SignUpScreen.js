@@ -31,7 +31,7 @@ import {
   Colors,
 } from './../components/styles';
 
-const { darkLight, brand } = Colors;
+const { darkLight, brand, secondaryTextColor } = Colors;
 
 function SignUpScreen({ navigation }) {
 
@@ -56,7 +56,7 @@ function SignUpScreen({ navigation }) {
     };
 
     const showDatePicker = () => {
-      setShow(true);
+      setShow('date');
     };
 
     // TODO: Function to handle signup (talk to backend)
@@ -123,14 +123,14 @@ function SignUpScreen({ navigation }) {
         )}
 
       <Formik
-        initialValues={{ name: '', email: '', phone: '', dateOfBirth: '', password: '', confirmPassword: '' }}
+        initialValues={{ name: '', email: '', phone: '', birthday: '', password: '', confirmPassword: '' }}
         onSubmit={(values, { setSubmitting }) => {
-            values = { ...values};
+            values = { ...values, birthday: dob};
             if (
               values.name == '' ||
               values.email == '' ||
               values.phone == '' ||
-              values.dateOfBirth == '' ||
+              values.birthday == '' ||
               values.password == '' ||
               values.confirmPassword == ''
             ) {
@@ -140,6 +140,7 @@ function SignUpScreen({ navigation }) {
               handleMessage('Passwords do not match')
               setSubmitting(false)
             } else {
+              console.log(dob)
               handleSignup(values, setSubmitting)
             }
           }}
@@ -177,8 +178,8 @@ function SignUpScreen({ navigation }) {
             <MyTextInput
               placeholder="Birthday (for rewards!)"
               placeholderTextColor={darkLight}
-              onChangeText={handleChange('dateOfBirth')}
-              onBlur={handleBlur('dateOfBirth')}
+              onChangeText={handleChange('birthday')}
+              onBlur={handleBlur('birthday')}
               value={dob ? dob.toDateString() : ''}
               icon="calendar-outline"
               editable={false}
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
       },
     text: {
         fontFamily: 'DMSans-Medium',
-        fontSize: 16
+        fontSize: 16,
     },
     smallText: {
         fontFamily: 'DMSans-Regular',

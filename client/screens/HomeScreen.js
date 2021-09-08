@@ -3,6 +3,13 @@ import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, Statu
 // import { StatusBar } from 'expo-status-bar';
 
 import { CredentialsContext } from '../components/CredentialsContext';
+import {
+    Colors,
+    StyledButton,
+    ButtonText
+  } from './../components/styles';
+
+const { secondaryTextColor, tertiary } = Colors;
 
 function HomeScreen({ navigation }) {
 
@@ -26,13 +33,15 @@ function HomeScreen({ navigation }) {
 
             <View style={styles.innerContentContainer}>
 
-                <TouchableOpacity style={[styles.button, {backgroundColor: '#ffffff'}]} onPress={() => navigation.push('Coupons')}>
-                        <Text style={styles.text}>My Coupons</Text>
-                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => navigation.push('AboutRewards')}>
-                    <Text style={styles.text}>Learn about Coco Donuts Rewards</Text>
-                </TouchableOpacity>
+                <StyledButton onPress={() => navigation.push('Coupons')} style={styles.button}>
+                    <ButtonText style={styles.text}>My Coupons</ButtonText>
+                </StyledButton>
+
+                <StyledButton onPress={() => navigation.push('AboutRewards')} style={[styles.button, {backgroundColor: tertiary}]}>
+                    <ButtonText style={styles.text}>Learn about Coco Donuts Rewards</ButtonText>
+                </StyledButton>
+
             </View>
         </View>  
     </>
@@ -41,8 +50,8 @@ function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     button: {
-        width: '100%',
-        height: 70,
+        width: '90%',
+        height: 55,
         backgroundColor: '#feadd6',
         justifyContent: 'center',
         alignItems: 'center'
@@ -97,7 +106,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'DMSans-Medium',
-        fontSize: 16
+        fontSize: 16,
+        color: secondaryTextColor
     }
 
 })

@@ -2,6 +2,12 @@ import React from 'react';
 import { TouchableOpacity, ImageBackground, StyleSheet, View, Image, Text, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
+import {
+    Colors,
+  } from './../components/styles';
+
+const { secondaryTextColor } = Colors;
+
 function WelcomeScreen({ navigation }) {
 
 
@@ -67,7 +73,8 @@ const styles = StyleSheet.create({
     }, 
     text: {
         fontFamily: 'DMSans-Medium',
-        fontSize: 20
+        fontSize: 20,
+        color: secondaryTextColor
     }
 
 })
