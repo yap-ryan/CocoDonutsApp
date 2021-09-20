@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
@@ -27,10 +28,12 @@ import {
     Colors,
   } from './../components/styles';
 
-const { secondaryTextColor, tertiary, brand } = Colors;
+const { secondaryTextColor, secondaryButtonColor, brand, darkLight } = Colors;
 
 function AccountScreen() {
 
+    const [message, setMessage] = React.useState()
+    const [messageType, setMessageType] = React.useState()
     const { setStoredCredentials } = React.useContext(CredentialsContext)
 
     // Date (of Birth)
@@ -55,7 +58,22 @@ function AccountScreen() {
 
     }
 
-    
+    // Function to change message state (if there is a message, it will be displayed)
+    const handleMessage = (message, type = 'FAILED') => {
+        setMessage(message)
+        setMessageType(type)
+    }
+
+    const presistLogin = async (credentials, message, status) => {
+        try {
+        await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+        handleMessage(message, status)
+        setStoredCredentials(credentials)
+        } catch (err) {
+        console.error(err)
+        handleMessage('Persisting login failed')
+        }
+    }
 
     return (
         <KeyboardAvoidingWrapper>
@@ -82,16 +100,90 @@ function AccountScreen() {
                     }
                 }}
             >
+            {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
+                <StyledFormArea>
+                    <MyTextInput
+                        label="Name"
+                        placeholder="Name"
+                        placeholderTextColor={darkLight}
+                        onChangeText={handleChange('name')}
+                        onBlur={handleBlur('name')}
+                        value={values.name}
+                        icon="person-outline"
+                    />
+                    <MyTextInput
+                        label="Email"
+                        placeholder="Email"
+                        placeholderTextColor={darkLight}
+                        onChangeText={handleChange('email')}
+                        onBlur={handleBlur('email')}
+                        value={values.email}
+                        keyboardType="email-address"
+                        icon="mail-outline"
+                        autoCapitalize='none'
+                    />
+                    <MyTextInput
+                        label="Phone Number"
+                        placeholder="Phone Number"
+                        placeholderTextColor={darkLight}
+                        onChangeText={handleChange('phone')}
+                        onBlur={handleBlur('phone')}
+                        value={values.phone}
+                        keyboardType="phone-pad"
+                        icon="call-outline"
+                        autoCapitalize='none'
+                    />
+                    <MyTextInput
+                        label="Birthday (Cannot Change)"
+                        placeholder="Birthday"
+                        placeholderTextColor={darkLight}
+                        onChangeText={handleChange('birthday')}
+                        onBlur={handleBlur('birthday')}
+                        value={dob ? dob.toDateString() : ''}
+                        icon="calendar-outline"
+                        editable={false}
+                        isDate={true}
+                    />
+                    <MsgBox style={{ fontFamily: 'DMSans-Regular' }} type={messageType}>{message}</MsgBox>
 
+                    {!isSubmitting && (
+                    <StyledButton onPress={handleSubmit}>
+                        <ButtonText style={styles.text}>Save Changes</ButtonText>
+                    </StyledButton>
+                    )}
+                    {isSubmitting && (
+                    <StyledButton disabled={true}>
+                        <ActivityIndicator size="large" color={brand} />
+                    </StyledButton>
+                    )}
+
+                    <Line />
+                </StyledFormArea>
+            )}
             </Formik>
 
             <StyledButton onPress={() => clearCredentialsOnLogout()} style={styles.signOutButton}>
-                <ButtonText style={styles.text}>Log Out</ButtonText>
+                <ButtonText style={styles.secondaryText}>Log Out</ButtonText>
             </StyledButton>
 
             </View> 
         </KeyboardAvoidingWrapper>
     );
+}
+
+const MyTextInput = ({ label, icon, isPassword, hidePassword, isDate, ...props }) => {
+    return (
+      <View style={{ marginTop: 7, marginBottom: 7 }}>
+        <LeftIcon>
+          {/* <Octicons name={icon} size={30} color='black' /> */}
+          <Ionicons name={icon} size={30} color='black' />
+        </LeftIcon>
+        <StyledInputLabel>{label}</StyledInputLabel>
+
+        <StyledTextInput {...props} />
+
+      </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -104,9 +196,13 @@ const styles = StyleSheet.create({
     },
     signOutButton: {
         width: '90%',
-        backgroundColor: tertiary
+        backgroundColor: secondaryButtonColor
     },
     text: {
+        fontFamily: 'DMSans-Medium',
+        fontSize: 16
+    },
+    secondaryText: {
         fontFamily: 'DMSans-Medium',
         fontSize: 16,
         color: secondaryTextColor

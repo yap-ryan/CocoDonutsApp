@@ -9,7 +9,7 @@ import {
     ButtonText
   } from './../components/styles';
 
-const { secondaryTextColor, tertiary } = Colors;
+const { secondaryTextColor, secondaryButtonColor, darkLight } = Colors;
 
 function HomeScreen({ navigation }) {
 
@@ -21,7 +21,7 @@ function HomeScreen({ navigation }) {
         <ImageBackground source={require('../assets/dozendonuts-blurred.png')} style={styles.imageBackground} >
             <View style={styles.imageBackgroundContent}>
                 <View style={styles.logoContainer}>
-                    <Image style={styles.logo} source={require('../assets/cocologopink.png')} />
+                    <Image style={styles.logo} source={require('../assets/cocologowithtext.png')} />
                 </View>
                 <View style={styles.pointsContainer}>
                     <Text style={styles.imageText}> {storedCredentials ? storedCredentials.name + '\'s Coco Points:' : "My Coco Points:" }</Text>
@@ -38,8 +38,8 @@ function HomeScreen({ navigation }) {
                     <ButtonText style={styles.text}>My Coupons</ButtonText>
                 </StyledButton>
 
-                <StyledButton onPress={() => navigation.push('AboutRewards')} style={[styles.button, {backgroundColor: tertiary}]}>
-                    <ButtonText style={styles.text}>Learn about Coco Donuts Rewards</ButtonText>
+                <StyledButton onPress={() => navigation.push('AboutRewards')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                    <ButtonText style={styles.secondaryText}>Learn about Coco Donuts Rewards</ButtonText>
                 </StyledButton>
 
             </View>
@@ -58,17 +58,17 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         width: '100%',
-        flex: 0.57,
+        flex: 0.58,
         alignItems: 'center',
         justifyContent: 'flex-start',
         backgroundColor: '#ffffff'
     },
     imageBackground: {
-        flex: 0.43,
+        flex: 0.42,
     },
     imageBackgroundContent: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.40)',
+        backgroundColor: 'rgba(0,0,0,0.55)',
         alignItems: 'center',
         justifyContent: 'flex-start', 
     },
@@ -85,17 +85,18 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     logo: {
-        height: 95,
-        width: 95,
+        height: 160,
+        width: 160,
         top: 5
     },
     logoContainer: {
-        flex: 0.65,
+        flex: 0.67,
         alignItems: 'center',
         justifyContent: 'center'
     },
     pointsContainer: {
-        flex: 0.35,
+        top: 3,
+        flex: 0.33,
         alignItems: 'center',
         justifyContent: 'flex-start'
     },
@@ -106,9 +107,15 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'DMSans-Medium',
+        fontSize: 16
+    },
+    secondaryText: {
+        fontFamily: 'DMSans-Medium',
         fontSize: 16,
         color: secondaryTextColor
     }
+
+
 
 })
 

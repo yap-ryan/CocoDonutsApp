@@ -36,7 +36,7 @@ const { darkLight, brand, secondaryTextColor } = Colors;
 function SignUpScreen({ navigation }) {
 
     const [hidePassword, setHidePassword] = React.useState(true)
-    const [message, setMessage] = React.useState();
+    const [message, setMessage] = React.useState()
     const [messageType, setMessageType] = React.useState()
     const {setStoredCredentials} = React.useContext(CredentialsContext)
 
