@@ -38,6 +38,9 @@ function HomeScreen({ navigation }) {
                     <ButtonText style={styles.text}>My Coupons</ButtonText>
                 </StyledButton>
 
+                <View style={{ height: 5 }}>
+                </View>
+
                 <StyledButton onPress={() => navigation.push('AboutRewards')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
                     <ButtonText style={styles.secondaryText}>Learn about Coco Donuts Rewards</ButtonText>
                 </StyledButton>

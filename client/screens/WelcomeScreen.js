@@ -6,7 +6,7 @@ import {
     Colors,
   } from './../components/styles';
 
-const { secondaryTextColor } = Colors;
+const { secondaryTextColor, darkLight } = Colors;
 
 function WelcomeScreen({ navigation }) {
 
@@ -25,7 +25,7 @@ function WelcomeScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.push('SignUpScreen')}>
-            <Text style={styles.text}>No account? Sign Up Here</Text>
+            <Text style={styles.secondaryText}>No account? Sign Up Here</Text>
         </TouchableOpacity>  
 
         <StatusBar style="light" />
@@ -74,7 +74,12 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'DMSans-Medium',
         fontSize: 20,
-        color: secondaryTextColor
+        color: '#4d4945'
+    },
+    secondaryText:{
+        fontFamily: 'DMSans-Medium',
+        fontSize: 20,
+        color: '#4d4945'
     }
 
 })

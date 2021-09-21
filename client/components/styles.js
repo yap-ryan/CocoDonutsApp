@@ -14,7 +14,7 @@ export const Colors = {
   brand: '#feadd6',
   green: '#10B981',
   red: '#EF4444',
-  secondaryTextColor: '#8b8682'
+  secondaryTextColor: '#6b6661'
 };
 
 const { primary, secondary, tertiary, darkLight, brand, green, red } = Colors;
@@ -111,6 +111,11 @@ export const LeftIcon = styled.View`
   top: 35px;
   position: absolute;
   z-index: 1;
+  ${(props) =>
+    props.top &&
+    `
+    top: ${props.top}px;
+  `}
 `;
 
 export const RightIcon = styled.TouchableOpacity`

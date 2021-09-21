@@ -34,7 +34,7 @@ function AccountScreen() {
 
     const [message, setMessage] = React.useState()
     const [messageType, setMessageType] = React.useState()
-    const { setStoredCredentials } = React.useContext(CredentialsContext)
+    const { storedCredentials, setStoredCredentials } = React.useContext(CredentialsContext)
 
     // Date (of Birth)
     const [date, setDate] = React.useState(new Date(2000, 0, 1));
@@ -79,8 +79,18 @@ function AccountScreen() {
         <KeyboardAvoidingWrapper>
             <View style={styles.container}>
 
+            <Text>Account Info</Text>
+
             <Formik
-                initialValues={{ name: '', email: '', phone: '', birthday: ''}}
+                initialValues={ storedCredentials ?
+                                { name: storedCredentials.name, 
+                                email: storedCredentials.email, 
+                                phone: storedCredentials.phone, 
+                                birthday: storedCredentials.birthday} :
+                                { name: '', 
+                                    email: '', 
+                                    phone: '', 
+                                    birthday: ''}}
                 onSubmit={(values, { setSubmitting }) => {
                     values = { ...values, birthday: dob};
                     if (
@@ -173,8 +183,8 @@ function AccountScreen() {
 
 const MyTextInput = ({ label, icon, isPassword, hidePassword, isDate, ...props }) => {
     return (
-      <View style={{ marginTop: 7, marginBottom: 7 }}>
-        <LeftIcon>
+      <View style={{ marginTop: 6, marginBottom: 6 }}>
+        <LeftIcon top={33}>
           {/* <Octicons name={icon} size={30} color='black' /> */}
           <Ionicons name={icon} size={30} color='black' />
         </LeftIcon>
