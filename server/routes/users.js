@@ -154,7 +154,7 @@ router.post('/login', async (req,res) => {
         console.log('Server Error: Empty input field')
     } else {
         try {
-            const user = await User.find({email})
+            const user = await User.findOne({email}).select('+password')
             if(user.length) {// If user exists
                 const hashedPassword = user[0].password
 
@@ -165,7 +165,7 @@ router.post('/login', async (req,res) => {
 
                         res.json({
                             status: 'SUCCESS',
-                            message: "Login Successful",
+                            message: 'Login Successful',
                             data: user
                         })
                         console.log('Login Success')

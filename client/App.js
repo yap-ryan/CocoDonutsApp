@@ -141,9 +141,11 @@ export default function App() {
   const checkLoginCreds = async () => {
     try {
       const creds = await AsyncStorage.getItem('cocoAppCredentials')
-      if (creds !== null) {
+      if (creds != null && creds.id != null) {
 
-        const url = `https://coco-donuts-heroku.herokuapp.com/users/${creds._id}`
+        console.log(creds.id)
+
+        const url = `https://coco-donuts-heroku.herokuapp.com/users/${creds.id}`
         let updatedCreds;
 
         // Get updated credentials from server
@@ -151,13 +153,15 @@ export default function App() {
 
           const resp = await axios.get(url)
           updatedCreds = resp.data    
+          console.log(updatedCreds)
+
 
         } catch (err) {
           console.error(err)
         }        
 
         console.log("Credentials in AsyncStorage found, will presist login with credentials: " + updatedCreds + '\n')
-        setStoredCredentials(JSON.parse(updatedCreds))
+        setStoredCredentials(updatedCreds)
       } else {
         console.log("No credentials in AsyncStorage found")
         setStoredCredentials(null)
