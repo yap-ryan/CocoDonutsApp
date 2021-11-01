@@ -59,7 +59,7 @@ function SignUpScreen({ navigation }) {
       setShow('date');
     };
 
-    // TODO: Function to handle signup (talk to backend)
+    // Function to handle signup (tell backend to record new user to backend)
     const handleSignup = async (credentials, setSubmitting) => {
         handleMessage(null) //Clear message
 
@@ -68,34 +68,34 @@ function SignUpScreen({ navigation }) {
           const resp = await axios.post(url, credentials)
 
           const result = resp.data
-          const {message, status, data} = result
+          const {msg, status, data} = result
 
           if (status !== 'SUCCESS') {
             console.log('FAILED TO SIGN UP')
-            handleMessage(message, status)
+            handleMessage(msg, status)
           } else {
-            console.log('SIGNED UP with credentials: ' + JSON.stringify(resp.data))
-            presistLogin({...data}, message, status)
+            console.log('SIGNED UP with credentials: ' + JSON.stringify(data))
+            presistLogin({...data}, msg, status)
           }
           setSubmitting(false)
         } catch (err) {
           setSubmitting(false)
-          handleMessage('An error occured connecting. Check your network and try again.')
+          handleMessage('Connection error. Check your network and try again.')
           console.error(err)
         }
 
     }
 
     // Function to change message state (if there is a message, it will be displayed)
-    const handleMessage = (message, type = 'FAILED') => {
-      setMessage(message)
+    const handleMessage = (msg, type = 'FAILED') => {
+      setMessage(msg)
       setMessageType(type)
     }
 
-    const presistLogin = async (credentials, message, status) => {
+    const presistLogin = async (credentials, msg, status) => {
       try {
         await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
-        handleMessage(message, status)
+        handleMessage(msg, status)
         setStoredCredentials(credentials)
       } catch (err) {
         console.error(err)

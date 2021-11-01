@@ -56,22 +56,47 @@ function AccountScreen() {
     // TODO: MAKE THIS FUNCTION
     const handleUpdateAccount = async (changedCredentials, setSubmitting) => {
 
+        const url = `https://coco-donuts-heroku.herokuapp.com/users/${storedCredentials.id}`
+
+        try {
+            const resp = await axios.patch(url, changedCredentials)
+            const result = resp.data
+            const {msg, status, data} = result
+
+            if (status !== 'SUCCESS') {
+                console.log('UPDATE FAILED')
+                handleMessage(msg, status)
+            } else {
+                console.log('UPDATE SUCCESSFUL new credentials: ' + JSON.stringify(data))
+                presistLogin({...data}, msg, status)
+            }
+
+
+            setSubmitting(false)
+
+        } catch (err) {
+            setSubmitting(false)
+            handleMessage('Connection error. Check your network and try again.')
+            console.error(err)
+        }
+        
+
     }
 
-    // Function to change message state (if there is a message, it will be displayed)
-    const handleMessage = (message, type = 'FAILED') => {
-        setMessage(message)
+    // Function to change message and messageType state (if there is a message, it will be displayed)
+    const handleMessage = (msg, type = 'FAILED') => {
+        setMessage(msg)
         setMessageType(type)
     }
 
-    const presistLogin = async (credentials, message, status) => {
+    const presistLogin = async (credentials, msg, status) => {
         try {
-        await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
-        handleMessage(message, status)
-        setStoredCredentials(credentials)
+            await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+            handleMessage(msg, status)
+            setStoredCredentials(credentials)
         } catch (err) {
-        console.error(err)
-        handleMessage('Persisting login failed')
+            console.error(err)
+            handleMessage('Persisting login failed')
         }
     }
 

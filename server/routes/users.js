@@ -68,10 +68,10 @@ router.post('/signup', async (req,res) => {
             status: 'ERROR',
             message: 'Invalid phone number entered'
         })
-    } else if (! /^(?!.*[$ ])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@%^&*-]).{8,20}$/.test(password)) {
+    } else if (! /^(?!.*[$ ])(?=.*?[A-Z])(?=.*?[0-9]).{8,15}$/.test(password)) {
         res.json({
             status: 'ERROR',
-            message: 'Password must have 1 upper case, 1 lower case, 1 digit, 1 special character (no $ or spaces), and be 8-20 chracters long'
+            message: 'Password must have at least 1 upper case, at least 1 digit, be 8-15 chracters long, and contain no $ or spaces'
         })
     } else {
         // Check if email and phone already being used before posting
@@ -192,7 +192,9 @@ router.post('/login', async (req,res) => {
 
         } catch (err) {
             res.json({
-                status: 'ERROR', message: 'Server Error while checking for existing user' })
+                status: 'ERROR', 
+                message: 'Server Error while checking for existing user' 
+            })
             console.error(err)
         }
 
@@ -202,33 +204,74 @@ router.post('/login', async (req,res) => {
 
 // Handle Patch requests
 router.patch('/:id', async (req,res) => {
+
+    let {name, email, phone, birthday, password} = req.body
+
     try {
         const user = await User.findById(req.params.id)
         let valueChanged = false
 
-        // Only patch password if the password will change & not null
-        if (req.body.password != null && req.body.password != user.password){
-            // New Password must fit length requirements
-            if (password.length < 8 || password.length > 20) {
-                user.password = req.body.password 
+        // Check for same name or null
+        if (name != null && name != user.name){
+            
+            // New name only letters allowed
+            if (/^[a-zA-Z ]*$/.test(name)) {
+                user.name = name
                 valueChanged = true
             } else {
-                res.json({status: 'ERROR', message: 'Password must be between 8 to 20 characters'})
-                console.log('No Update: Password must be between 8 to 20 characters')
+                res.json({
+                    status: 'ERROR',
+                    message: 'Invalid name entered: Please only use letters'
+                })
+                console.log('No Update: Name conditions not met')
+            }
+        }
+
+        // Only patch password if the password will change & not null
+        if (password != null && password != user.password){
+
+            // New password must meet conditions
+            if (/^(?!.*[$ ])(?=.*?[A-Z])(?=.*?[0-9]).{8,15}$/.test(password)) {
+                // Conditions met, update password
+                user.password = password 
+                valueChanged = true
+            } else {
+                res.json({
+                    status: 'ERROR',
+                    message: 'Password must have at least 1 upper case, at least 1 digit, be 8-15 chracters long, and contain no $ or spaces'
+                })
+                console.log('No Update: Password conditions not met')
             }
         }
 
         // Only patch email if the email will change & not null
-        if (req.body.email != null && req.body.email.toLowerCase() != user.email){
+        if (email != null && email.toLowerCase() != user.email){
             // New Email must fit regex
-            if (/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(req.body.email)){
-                user.email = req.body.email.toLowerCase()
+            if (/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email)){
+                user.email = email.toLowerCase()
                 valueChanged = true
             } else {
-                res.json({message: 'Entered email is invalid'})
+                res.json({
+                    status: 'ERROR',
+                    message: 'Entered email is invalid'
+                })
                 console.log('No Update: Entered email is invalid')
             }
-        }   
+        }  
+        
+        if (phone != null && phone != user.phone) {
+            if (/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone)) {
+                user.phone = phone
+                valueChanged = true
+            } else {
+                res.json({
+                    status: 'ERROR',
+                    message: 'Invalid phone number entered'
+                })
+                console.log('No Update: Entered phone is invalid')
+            }
+        }
+
         
         // Only patch points if the points will change & not null
         if (req.body.points != null && req.body.points != user.points){
@@ -238,12 +281,19 @@ router.patch('/:id', async (req,res) => {
         
         // Only save change if a value is changed (prevent redundant db queries)
         if (valueChanged) {
-            const a1 = await user.save()
-            res.json(a1)
+            const result = await user.save()
+            res.json({
+                status: 'SUCCESS',
+                message: 'Update successful',
+                data: result
+            })
             console.log('Update Successful')
         } else {
-            res.json({message: 'No Update: Values inputed identical to those in database'})
-            console.log('No Update: Values inputed identical to database')
+            res.json({
+                status: 'ERROR',
+                message: 'No Update: Values inputed identical to those in database'
+            })
+            console.log('No Update: Values inputed identical to stored values (could be another issue)')
         }
 
     } catch(err) {
