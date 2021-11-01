@@ -2,6 +2,7 @@
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import * as Font from 'expo-font';
 import React  from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -10,6 +11,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
+
 
 // 'Stuff I made' imports
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -133,14 +135,29 @@ export default function App() {
     }
   }
 
-  /** Check if login credentials already exist in async storage on client device
+  /** Check if login credentials already exist in async storage on client device.
+   *  IF there are stored credentials, then update stored credentials from server 
   RUNS ON APP LOADING SCREEN */
   const checkLoginCreds = async () => {
     try {
       const creds = await AsyncStorage.getItem('cocoAppCredentials')
       if (creds !== null) {
-        console.log("Credentials in AsyncStorage found, will presist login with credentials: " + creds + '\n')
-        setStoredCredentials(JSON.parse(creds))
+
+        const url = `https://coco-donuts-heroku.herokuapp.com/users/${creds._id}`
+        let updatedCreds;
+
+        // Get updated credentials from server
+        try {
+
+          const resp = await axios.get(url)
+          updatedCreds = resp.data    
+
+        } catch (err) {
+          console.error(err)
+        }        
+
+        console.log("Credentials in AsyncStorage found, will presist login with credentials: " + updatedCreds + '\n')
+        setStoredCredentials(JSON.parse(updatedCreds))
       } else {
         console.log("No credentials in AsyncStorage found")
         setStoredCredentials(null)

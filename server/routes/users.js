@@ -28,7 +28,19 @@ router.get('/:id', async (req,res) => {
     try{
         // Find user
         const user = await User.findById(req.params.id)
-        res.json(user)
+
+        // New object literal so we don't return the hashed password in response!
+        const respData = 
+            {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                birthday: user.birthday,
+                points: user.points
+            }
+
+        res.json(JSON.stringify(respData))
         console.log('Get Success')
 
     } catch(err) {
@@ -108,10 +120,21 @@ router.post('/signup', async (req,res) => {
                     // Save new user to db
                     try{    
                         const result = await newUser.save()
+
+                        const respData = 
+                            {
+                                id: result._id,
+                                name: result.name,
+                                email: result.email,
+                                phone: result.phone,
+                                birthday: result.birthday,
+                                points: result.points
+                            }
+
                         res.json({
                             status: 'SUCCESS',
                             message: 'Sign-up Successful',
-                            data: result
+                            data: respData
                         })
                         console.log('Sign-up Success')
                     } catch(err){
@@ -160,10 +183,21 @@ router.post('/login', async (req,res) => {
                     const passwordsMatch = await bcrypt.compare(password, hashedPassword)
 
                     if (passwordsMatch) {
+
+                        const respData = 
+                            {
+                                id: user._id,
+                                name: user.name,
+                                email: user.email,
+                                phone: user.phone,
+                                birthday: user.birthday,
+                                points: user.points
+                            }
+
                         res.json({
                             status: 'SUCCESS',
                             message: "Login Successful",
-                            data: user
+                            data: respData
                         })
                         console.log('Login Success')
 
@@ -282,10 +316,22 @@ router.patch('/:id', async (req,res) => {
         // Only save change if a value is changed (prevent redundant db queries)
         if (valueChanged) {
             const result = await user.save()
+
+            // Use this JSON instead to prevent hashed password in response
+            const respData = 
+            {
+                id: result._id,
+                name: result.name,
+                email: result.email,
+                phone: result.phone,
+                birthday: result.birthday,
+                points: result.points
+            }
+
             res.json({
                 status: 'SUCCESS',
                 message: 'Update successful',
-                data: result
+                data: respData
             })
             console.log('Update Successful')
         } else {
@@ -308,9 +354,9 @@ router.patch('/:id', async (req,res) => {
 router.delete('/:id', async (req,res) => {
     try {
         const user = await User.findById(req.params.id)
-        const a1 = await user.delete()
-        res.json({message: 'User successfully deleted', data: a1})
-        console.log('Delete Successful for user: ' + a1)
+        const deletedUser = await user.delete()
+        res.json({message: 'User successfully deleted', data: deletedUser})
+        console.log('Delete Successful for user: ' + deletedUser)
     } catch(err) {
         res.json({
             status: 'ERROR', message: 'Server Error when trying to delete user' })

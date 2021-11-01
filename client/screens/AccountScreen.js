@@ -56,7 +56,7 @@ function AccountScreen() {
     // TODO: MAKE THIS FUNCTION
     const handleUpdateAccount = async (changedCredentials, setSubmitting) => {
 
-        const url = `https://coco-donuts-heroku.herokuapp.com/users/${storedCredentials.id}`
+        const url = `https://coco-donuts-heroku.herokuapp.com/users/${storedCredentials._id}`
 
         try {
             const resp = await axios.patch(url, changedCredentials)
@@ -65,6 +65,7 @@ function AccountScreen() {
 
             if (status !== 'SUCCESS') {
                 console.log('UPDATE FAILED')
+                console.log(msg)
                 handleMessage(msg, status)
             } else {
                 console.log('UPDATE SUCCESSFUL new credentials: ' + JSON.stringify(data))
