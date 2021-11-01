@@ -154,7 +154,7 @@ router.post('/login', async (req,res) => {
         console.log('Server Error: Empty input field')
     } else {
         try {
-            const user = await User.findOne({email}).select('+password')
+            const user = await User.findOne({email})
             if(user.length) {// If user exists
                 const hashedPassword = user[0].password
 
