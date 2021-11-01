@@ -29,18 +29,7 @@ router.get('/:id', async (req,res) => {
         // Find user
         const user = await User.findById(req.params.id)
 
-        // New object literal so we don't return the hashed password in response!
-        const respData = 
-            {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
-                birthday: user.birthday,
-                points: user.points
-            }
-
-        res.json(JSON.stringify(respData))
+        res.json(user)
         console.log('Get Success')
 
     } catch(err) {
@@ -121,20 +110,10 @@ router.post('/signup', async (req,res) => {
                     try{    
                         const result = await newUser.save()
 
-                        const respData = 
-                            {
-                                id: result._id,
-                                name: result.name,
-                                email: result.email,
-                                phone: result.phone,
-                                birthday: result.birthday,
-                                points: result.points
-                            }
-
                         res.json({
                             status: 'SUCCESS',
                             message: 'Sign-up Successful',
-                            data: respData
+                            data: result
                         })
                         console.log('Sign-up Success')
                     } catch(err){
@@ -184,20 +163,10 @@ router.post('/login', async (req,res) => {
 
                     if (passwordsMatch) {
 
-                        const respData = 
-                            {
-                                id: user._id,
-                                name: user.name,
-                                email: user.email,
-                                phone: user.phone,
-                                birthday: user.birthday,
-                                points: user.points
-                            }
-
                         res.json({
                             status: 'SUCCESS',
                             message: "Login Successful",
-                            data: respData
+                            data: user
                         })
                         console.log('Login Success')
 
@@ -317,21 +286,10 @@ router.patch('/:id', async (req,res) => {
         if (valueChanged) {
             const result = await user.save()
 
-            // Use this JSON instead to prevent hashed password in response
-            const respData = 
-            {
-                id: result._id,
-                name: result.name,
-                email: result.email,
-                phone: result.phone,
-                birthday: result.birthday,
-                points: result.points
-            }
-
             res.json({
                 status: 'SUCCESS',
                 message: 'Update successful',
-                data: respData
+                data: result
             })
             console.log('Update Successful')
         } else {
