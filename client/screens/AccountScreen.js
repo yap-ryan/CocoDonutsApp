@@ -61,15 +61,15 @@ function AccountScreen() {
         try {
             const resp = await axios.patch(url, changedCredentials)
             const result = resp.data
-            const {msg, status, data} = result
+            const {message, status, data} = result
 
             if (status !== 'SUCCESS') {
-                console.log('UPDATE FAILED')
-                console.log(msg)
-                handleMessage(msg, status)
+                console.log('UPDATE FAILED with message: ')
+                console.log(message + '\n')
+                handleMessage(message, status)
             } else {
-                console.log('UPDATE SUCCESSFUL new credentials: ' + JSON.stringify(data))
-                presistLogin({...data}, msg, status)
+                console.log('UPDATE SUCCESSFUL new credentials: ' + JSON.stringify(data) + '\n')
+                presistLogin({...data}, message, status)
             }
 
 
@@ -103,9 +103,10 @@ function AccountScreen() {
 
     return (
         <KeyboardAvoidingWrapper>
-            <View style={styles.container}>
+        <StyledContainer>
+        <InnerContainer>
 
-            <Text>Account Info</Text>
+            <Text style={styles.headerContainer}>Account Info</Text>
 
             <Formik
                 initialValues={ storedCredentials ?
@@ -131,7 +132,7 @@ function AccountScreen() {
                         handleMessage('Passwords do not match')
                         setSubmitting(false)
                     } else {
-                        console.log(dob)
+                        // console.log(dob)
                         handleUpdateAccount(values, setSubmitting)
                     }
                 }}
@@ -203,7 +204,8 @@ function AccountScreen() {
                 <ButtonText style={styles.secondaryText}>Log Out</ButtonText>
             </StyledButton>
 
-            </View> 
+        </InnerContainer> 
+        </StyledContainer>
         </KeyboardAvoidingWrapper>
     );
 }
@@ -230,6 +232,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white'
+    },
+    headerContainer: {
+        paddingTop: 35,
+        paddingBottom: 15
     },
     signOutButton: {
         width: '90%',
