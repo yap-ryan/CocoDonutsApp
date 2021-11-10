@@ -120,19 +120,19 @@ function AccountScreen() {
                 onSubmit={(values, { setSubmitting }) => {
                     values = { ...values, birthday: dob};
                     if (
-                    values.name == '' ||
-                    values.email == '' ||
-                    values.phone == '' ||
-                    values.birthday == ''
+                        values.name == '' ||
+                        values.email == '' ||
+                        values.phone == '' ||
+                        values.birthday == '' 
                     ) {
-                    handleMessage('Please fill in all fields')
-                    setSubmitting(false)
+                        handleMessage('Please fill in all fields')
+                        setSubmitting(false)
                     } else if (values.password !== values.confirmPassword) {
-                    handleMessage('Passwords do not match')
-                    setSubmitting(false)
+                        handleMessage('Passwords do not match')
+                        setSubmitting(false)
                     } else {
-                    console.log(dob)
-                    handleUpdateAccount(values, setSubmitting)
+                        console.log(dob)
+                        handleUpdateAccount(values, setSubmitting)
                     }
                 }}
             >
@@ -180,6 +180,7 @@ function AccountScreen() {
                         editable={false}
                         isDate={true}
                     />
+
                     <MsgBox style={{ fontFamily: 'DMSans-Regular' }} type={messageType}>{message}</MsgBox>
 
                     {!isSubmitting && (

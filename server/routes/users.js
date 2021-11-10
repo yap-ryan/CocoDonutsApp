@@ -163,9 +163,10 @@ router.post('/login', async (req,res) => {
 
                     if (passwordsMatch) {
 
+                        // Extra Security:
                         // Used to prevent hashed password from being returned in response 
                         const respData = {
-                            id: user[0]._id,
+                            _id: user[0]._id,
                             name: user[0].name,
                             email: user[0].email,
                             phone: user[0].phone,

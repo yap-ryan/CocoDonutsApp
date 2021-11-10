@@ -56,8 +56,8 @@ function LoginScreen({ navigation }) {
             console.log('FAILED TO LOGGED IN')
             handleMessage(message, status)
           } else {
-            console.log('LOGGED IN with credentials: ' + JSON.stringify({...data[0]}) + '\n')
-            presistLogin({...data[0]}, message, status)
+            console.log('LOGGED IN with credentials: ' + JSON.stringify({...data}) + '\n')
+            presistLogin({...data}, message, status)
           }
           setSubmitting(false)
         } catch (err) {
