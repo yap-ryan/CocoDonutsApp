@@ -41,6 +41,20 @@ function HomeScreen({ navigation }) {
                 <View style={{ height: 5 }}>
                 </View>
 
+                <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                    <ButtonText style={styles.secondaryText}>Donuts</ButtonText>
+                </StyledButton>
+                
+                <View style={{ height: 5 }}>
+                </View>
+
+                <StyledButton onPress={() => navigation.push('CoffeeShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                    <ButtonText style={styles.secondaryText}>Coffee</ButtonText>
+                </StyledButton>
+                
+                <View style={{ height: 5 }}>
+                </View>
+
                 <StyledButton onPress={() => navigation.push('AboutRewards')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
                     <ButtonText style={styles.secondaryText}>Learn about Coco Donuts Rewards</ButtonText>
                 </StyledButton>

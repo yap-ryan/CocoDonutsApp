@@ -21,9 +21,10 @@ import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
 import AccountScreen from './screens/AccountScreen';
 import CouponScreen from './screens/CouponScreen';
+import DonutShopScreen from './screens/DonutShopScreen';
+import CoffeeShopScreen from './screens/CoffeeShopScreen';
 import AboutRewardsScreen from './screens/AboutRewardsScreen';
 import { CredentialsContext } from './components/CredentialsContext';
-
 
 
 const HomeStack = createStackNavigator()
@@ -34,6 +35,10 @@ const HomeStackScreen = () => {
       options={{ headerShown: false, animationEnabled: false }} />
     <HomeStack.Screen name="Coupons" component={CouponScreen} 
       options={{ animationEnabled: false }}/>
+    <HomeStack.Screen name="DonutShop" component={DonutShopScreen} 
+      options={{ title:"Donuts", animationEnabled: false }}/>
+    <HomeStack.Screen name="CoffeeShop" component={CoffeeShopScreen} 
+      options={{ title:"Coffee", animationEnabled: false }}/>
     <HomeStack.Screen name="AboutRewards" component={AboutRewardsScreen} 
       options={{ title:"About Rewards", animationEnabled: false }} />
   </HomeStack.Navigator>

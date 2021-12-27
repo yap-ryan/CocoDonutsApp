@@ -28,7 +28,7 @@ import {
     Colors,
   } from './../components/styles';
 
-const { secondaryTextColor, secondaryButtonColor, brand, darkLight } = Colors;
+const { secondaryTextColor, secondaryButtonColor, brand, darkLight, red } = Colors;
 
 function AccountScreen() {
 
@@ -201,7 +201,7 @@ function AccountScreen() {
             </Formik>
 
             <StyledButton onPress={() => clearCredentialsOnLogout()} style={styles.signOutButton}>
-                <ButtonText style={styles.secondaryText}>Log Out</ButtonText>
+                <ButtonText style={styles.logOutButtonText}>Log Out</ButtonText>
             </StyledButton>
 
         </InnerContainer> 
@@ -245,10 +245,10 @@ const styles = StyleSheet.create({
         fontFamily: 'DMSans-Medium',
         fontSize: 16
     },
-    secondaryText: {
+    logOutButtonText: {
         fontFamily: 'DMSans-Medium',
         fontSize: 16,
-        color: secondaryTextColor
+        color: red
     }
 
 })

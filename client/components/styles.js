@@ -13,11 +13,11 @@ export const Colors = {
   darkLight: '#a3a3a3',
   brand: '#feadd6',
   green: '#10B981',
-  red: '#EF4444',
+  red: '#ff8989',
   secondaryTextColor: '#6b6661'
 };
 
-const { primary, secondary, tertiary, darkLight, brand, green, red } = Colors;
+const { primary, secondary, tertiary, darkLight, brand, green, red, secondaryButtonColor } = Colors;
 
 export const StyledContainer = styled.View`
   flex: 1;
@@ -140,6 +140,18 @@ export const StyledButton = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: center;
   `}
+`;
+
+export const ItemCardPressable = styled.TouchableOpacity`
+  background-color: ${secondaryButtonColor};
+  border-radius: 7px;
+  border-width: 1px; 
+  border-color: #a7a7a7;
+  margin-vertical: 10px;
+  margin-horizontal: 2.5%;
+  height: 220px;
+  width: 45%;
+  elevation: 3;
 `;
 
 export const ButtonText = styled.Text`
