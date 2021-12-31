@@ -219,7 +219,7 @@ router.post('/login', async (req,res) => {
 // Handle Patch requests
 router.patch('/:id', async (req,res) => {
 
-    let {name, email, phone, birthday, password} = req.body
+    let {name, email, phone, password} = req.body
 
     try {
         const user = await User.findById(req.params.id)
