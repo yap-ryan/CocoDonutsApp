@@ -41,7 +41,6 @@ function LoginScreen({ navigation }) {
     const [hidePassword, setHidePassword] = React.useState(true);
     const {setStoredCredentials} = React.useContext(CredentialsContext)
 
-    // TODO: Communicate w/ backend to validate
     const handleLogin = async (credentials, setSubmitting) => {
         handleMessage(null) //Clear message
 

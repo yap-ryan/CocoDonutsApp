@@ -1,3 +1,28 @@
+import ItemCard from '../screens/DonutShopScreen'
+
+// Item Images imports
+import appleFritterImg from 'donuts/apple-fritter.jpg'
+import bavarianCreamFilledImg from 'donuts/bavarian-cream-filled.jpg'
+import chocolateButtermilkImg from 'donuts/chocolate-buttermilk.jpg'
+
+
+/**
+ *  Should contain all Item objects which are donuts
+ */
+ export let donutList = [];
+
+ /**
+  *  Should instiantiate all donut items and put them into itemList static variable
+  */
+ export const instantiateDonutItems = () => {
+      let appleFritter = new Item(0, 'Apple Fritter', 'donuts/apple-fritter.jpg', 5)
+      let bavarianCreamFilled = new Item(1, 'Bavarian Cream Filled', 'donuts/bavarian-cream-filled.jpg', 5)
+      let chocolateButtermilk = new Item(2, 'Chocolate Buttermilk', 'donuts/chocolate-buttermilk.jpg', 5)
+ 
+      donutList.push(appleFritter, bavarianCreamFilled, chocolateButtermilk)
+      console.log(donutList)
+}
+
 /**
  *  Each Item should only be instantiated once (ie. only 1 Apple Fritter)
  *  and each item should have a unique ID
@@ -5,7 +30,7 @@
  *  NOTE: May not need this class if we store images in database
  * 
  */
-class Item {
+export default class Item {
 
 
     // id => INTEGER Each item is associated with a unique ID eg. Apple Fritter -> id: 0 (SHOULD NOT CHANGE)
@@ -40,5 +65,14 @@ class Item {
     getPointCost(){
         return this.pointCost
     }
+
+    getItemDisplayComponent() {
+        return(
+            <ItemCard itemName={this.name} imgSrc={this.imgSrc} pointCost={this.pointCost}/>
+        )
+    }
 }
+
+
+
 

@@ -1,10 +1,13 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, Alert } from 'react-native';
 import { ItemCardPressable } from './../components/styles'
 import { Colors } from './../components/styles';
 import appleFritterImg from 'donuts/apple-fritter.jpg'
 import bavarianCreamFilledImg from 'donuts/bavarian-cream-filled.jpg'
-
+import axios from 'axios';
+import items from '../items.json'
+import requireImgSrc from '../itemImgSrcHelper'
 
 const { brand, secondaryTextColor } = Colors;
 
@@ -13,11 +16,41 @@ const { brand, secondaryTextColor } = Colors;
  */
 function DonutShopScreen() {
 
+    // const [donutList, setDonutList] = useState([])
+
+    // useEffect(() => {
+    //     console.log("First Render")
+    //     handleGetDonuts()
+    // }, [])
+
+    // let tempImg = ''
+
+    // // Will get all items of type 'donut'
+    // const handleGetDonuts = async () => {
+    //     const url = 'https://coco-donuts-heroku.herokuapp.com/items/'
+    //     try {
+    //         const resp = await axios.get(url)
+    //         const items = resp.data
+
+    //         tempImg = items[0].imgSrc
+    //         console.log(tempImg)
+    //         setDonutList(items)
+    //     } catch (err) {
+    //         console.log('error')
+    //         console.error(err)
+    //     }
+    // }
+
     return (
         <SafeAreaView style={styles.safeAreaView}>
             <ScrollView>
                 <View style={styles.listingContainer}>
-                    <ItemCard itemName='Apple Fritter' imgSrc={appleFritterImg} pointCost={5}/>
+                    {items.donuts.map(donut => (
+                        <ItemCard key={donut.id} itemId={donut.id} itemName={donut.name} pointCost={donut.pointCost} />
+                    ))}
+                    
+                    {/*
+                    <ItemCard itemName='Apple Fritter' imgSrc={require(appFrit)} pointCost={5}/>
                     <ItemCard itemName='Bavarian Cream Filled' imgSrc={bavarianCreamFilledImg} pointCost={5}/>
                     <ItemCard itemName='Chocolate Buttermilk' imgSrc={require('../assets/donuts/chocolate-buttermilk.jpg')} pointCost={5}/>
                     <ItemCard itemName='Chocolate Coconut Cake' imgSrc={require('../assets/donuts/chocolate-coconut-cake.jpg')} pointCost={5}/>
@@ -39,7 +72,7 @@ function DonutShopScreen() {
                     <ItemCard itemName='Lemon Jelly Filled' imgSrc={require('../assets/donuts/lemon-jelly-filled.jpg')} pointCost={5}/>
                     <ItemCard itemName='Maple Buttermilk' imgSrc={require('../assets/donuts/maple-buttermilk.jpg')} pointCost={5}/>
                     <ItemCard itemName='Maple Raised Bar' imgSrc={require('../assets/donuts/maple-raised-bar.jpg')} pointCost={5}/>
-                    {/* TODO: Combine Mochi flavors into 1 card & combine images into gif ??? */}
+
                     <ItemCard itemName='Mochi Chocolate' imgSrc={require('../assets/donuts/mochi-chocolate.jpg')} pointCost={5}/>
                     <ItemCard itemName='Mochi Matcha' imgSrc={require('../assets/donuts/mochi-matcha.jpg')} pointCost={5}/>
                     <ItemCard itemName='Mochi Oreo' imgSrc={require('../assets/donuts/mochi-oreo.jpg')} pointCost={5}/>
@@ -50,7 +83,7 @@ function DonutShopScreen() {
                     <ItemCard itemName='Signature Coco Raised' imgSrc={require('../assets/donuts/signature-coco-raised.jpg')} pointCost={5}/>
                     <ItemCard itemName='Sugar Twist' imgSrc={require('../assets/donuts/sugar-twist.jpg')} pointCost={5}/>
                     <ItemCard itemName='Vanilla Cake' imgSrc={require('../assets/donuts/vanilla-cake.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Vanilla Coconut Cake' imgSrc={require('../assets/donuts/vanilla-coconut-cake.jpg')} pointCost={5}/>
+                    <ItemCard itemName='Vanilla Coconut Cake' imgSrc={require('../assets/donuts/vanilla-coconut-cake.jpg')} pointCost={5}/> */}
 
                 </View>
             </ScrollView>
@@ -58,6 +91,7 @@ function DonutShopScreen() {
         
     );
 }
+
 
 const createRedeemAlert = (itemName) => {
     Alert.alert(
@@ -77,12 +111,13 @@ const createRedeemAlert = (itemName) => {
 /**
  *  Component to display redeemable coupon item 
  */
-const ItemCard = ({itemName, imgSrc, pointCost}) => {
+export const ItemCard = ({itemId, itemName, pointCost}) => {
+
     return (
         <ItemCardPressable onPress={() => createRedeemAlert(itemName)}>
             <Image
                 style={styles.itemImage}
-                source={imgSrc}
+                source={requireImgSrc(itemId)}
             />
             <View style={styles.itemPointsView}>
                 <Text style={styles.itemPointsText}> {pointCost} pts </Text>

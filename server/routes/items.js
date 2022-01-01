@@ -22,7 +22,7 @@ router.get('/', async (req,res) => {
 // Handle post requests (Post new Item to db)
 router.post('/', async(req,res) => {
 
-    let {name, imgSrc, pointCost} = req.body
+    let {name, imgSrc, type, pointCost} = req.body
 
     // Make sure item name is unique
     try{
@@ -44,6 +44,7 @@ router.post('/', async(req,res) => {
         {
             name: name,
             imgSrc: imgSrc,
+            type: type,
             pointCost: pointCost
         }
     )

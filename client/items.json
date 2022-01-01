@@ -1,0 +1,153 @@
+{
+    "donuts": [
+        {
+            "id": 0,
+            "name": "Apple Fritter",
+            "imgSrc": "donuts/apple-fritter.jpg",
+            "pointCost": 5
+        },
+        {
+            "id": 1,
+            "name": "Bavarian Cream Filled",
+            "pointCost": 5
+        },
+        {
+            "id": 2,
+            "name": "Chocolate Buttermilk",
+            "pointCost": 5
+        },
+        {
+            "id": 3,
+            "name": "Chocolate Coconut Cake",
+            "pointCost": 5
+        },
+        {
+            "id": 4,
+            "name": "Chocolate Old Fashion",
+            "pointCost": 5
+        },
+        {
+            "id": 5,
+            "name": "Chocolate or Vanilla Peanute Cake",
+            "pointCost": 5
+        },
+        {
+            "id": 6,
+            "name": "Chocolate or Vanilla Sprinkle Cake",
+            "pointCost": 5
+        },
+        {
+            "id": 7,
+            "name": "Chocolate Raised Bar",
+            "pointCost": 5
+        },
+        {
+            "id": 8,
+            "name": "Chocolate Sprinkle Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 9,
+            "name": "Cinnamon Roll",
+            "pointCost": 5
+        },
+        {
+            "id": 10,
+            "name": "Cinnamon Sugar Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 11,
+            "name": "Cinnamon Sugar Twist",
+            "pointCost": 5
+        },
+        {
+            "id": 12,
+            "name": "Coconut Chocolate Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 13,
+            "name": "Crumb Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 14,
+            "name": "Glazed Buttermilk",
+            "pointCost": 5
+        },
+        {
+            "id": 15,
+            "name": "Glazed or Maple Old Fashion",
+            "pointCost": 5
+        },
+        {
+            "id": 16,
+            "name": "Glazed Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 17,
+            "name": "Lavendar Cake",
+            "pointCost": 5
+        },
+        {
+            "id": 18,
+            "name": "Lavendar Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 19,
+            "name": "Lemon Jelly Filled",
+            "pointCost": 5
+        },
+        {
+            "id": 20,
+            "name": "Maple Buttermilk",
+            "pointCost": 5
+        },
+        {
+            "id": 21,
+            "name": "Maple Raised Bar",
+            "pointCost": 5
+        },
+        {
+            "id": 22,
+            "name": "Mochi Donut",
+            "pointCost": 5
+        },
+        {
+            "id": 23,
+            "name": "Peanut Chocolate Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 24,
+            "name": "Raspberry Jelly Filled",
+            "pointCost": 5
+        },
+        {
+            "id": 25,
+            "name": "Signature Coco Raised",
+            "pointCost": 5
+        },
+        {
+            "id": 26,
+            "name": "Sugar Twist",
+            "pointCost": 5
+        },
+        {
+            "id": 27,
+            "name": "Vanilla Cake",
+            "pointCost": 5
+        },
+        {
+            "id": 28,
+            "name": "Vanilla Coconut Cake",
+            "pointCost": 5
+        }
+    ],
+    "coffee": [
+
+    ]
+}

@@ -74,11 +74,11 @@ const TabsScreen = () => {
           <Icon name="home" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
         )
         }}/>
-      <Tabs.Screen name="Game" component={GameScreen} options={{
+      {/* <Tabs.Screen name="Game" component={GameScreen} options={{
         tabBarIcon: ({ focused} ) => (
           <Icon name="game-controller" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
         )
-        }}/>
+        }}/> */}
       <Tabs.Screen name="Account" component={AccountScreen} options={{
         tabBarIcon: ({ focused} ) => (
           <Icon name="person-circle" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
@@ -107,6 +107,7 @@ const RootStackScreen = () => {
     
   )
 }
+
 
 
 export default function App() {
@@ -176,6 +177,7 @@ export default function App() {
     }
   }
 
+
   // List of functions to run ASYNCHRONOUSLY when app loading
   const startAppLoading = async () => {
     try {
@@ -189,10 +191,10 @@ export default function App() {
   // Asynchronously cache assets and set load state to false when done
   if (!appReady) {
     return <AppLoading 
-      startAsync={startAppLoading}
+      startAsync={startAppLoading} 
       onFinish={() => setAppReady(true)}
       onError={console.warn}
-    />
+    /> 
   }
   
   return (

@@ -24,8 +24,10 @@ const usersRouter = require('./routes/users')
 // "For all requests to /users, all requests must be sent to usersRouter"
 app.use('/users', usersRouter)
 
-const itemsRouter = require('./routes/items')
-app.use('/items', itemsRouter)
+
+// DEPRECATED THIS PART - WILL STORE ITEMS IN JSON ON FILE SERVER INSTEAD
+// const itemsRouter = require('./routes/items')
+// app.use('/items', itemsRouter)
 
 
 app.listen(PORT, () => console.log('Server Started on port: ' + PORT))

@@ -10,6 +10,10 @@ const itemSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        type: {               // Either type 'donut' or 'coffee'
+            type: String,
+            required: true
+        },
         pointCost: {
             type: Number,
             required: true

@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 
 /**
  *  This screen should list out all of the customer's coupons
  */
 function CouponScreen() {
     return (
-        <SafeAreaView style={styles.safeAreaView}>
-
-        </SafeAreaView>
+        <View style={styles.listingContainer}>
+            <CouponCard/>
+        </View>
     );
 }
 
@@ -17,9 +17,9 @@ function CouponScreen() {
  */
 const CouponCard = ({itemName, imgSrc, pointCost}) => {
     return (
-        <View>
-
-        </View>
+        <TouchableOpacity style={styles.couponCard}>
+            <Text> Test </Text>
+        </TouchableOpacity>
     )
 }
 
@@ -30,9 +30,14 @@ const styles = StyleSheet.create({
     listingContainer: {
         display: 'flex',
         flexDirection: 'column',
-        margin: '2.5%'
+        margin: '3%'
+    },
+    couponCard: {
+        backgroundColor: 'white',
+        height: 90,
+        borderRadius: 6,
+        elevation: 2
     }
-
 })
 
 export default CouponScreen;
