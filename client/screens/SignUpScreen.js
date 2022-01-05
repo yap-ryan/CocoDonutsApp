@@ -41,7 +41,7 @@ function SignUpScreen({ navigation }) {
     const {setStoredCredentials} = React.useContext(CredentialsContext)
 
     // Date (of Birth)
-    const [date, setDate] = React.useState(new Date(2000, 0, 1));
+    const [date, setDate] = React.useState(new Date());
     // State to show/hide date selector 
     const [show, setShow] = React.useState(false);
     // Actual Date of Birth value to be sent
@@ -68,14 +68,14 @@ function SignUpScreen({ navigation }) {
           const resp = await axios.post(url, credentials)
 
           const result = resp.data
-          const {msg, status, data} = result
+          const {message, status, data} = result
 
           if (status !== 'SUCCESS') {
             console.log('FAILED TO SIGN UP')
-            handleMessage(msg, status)
+            handleMessage(message, status)
           } else {
             console.log('SIGNED UP with credentials: ' + JSON.stringify(data))
-            presistLogin({...data}, msg, status)
+            presistLogin({...data}, message, status)
           }
           setSubmitting(false)
         } catch (err) {

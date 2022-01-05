@@ -3,7 +3,6 @@
         {
             "id": 0,
             "name": "Apple Fritter",
-            "imgSrc": "donuts/apple-fritter.jpg",
             "pointCost": 5
         },
         {
@@ -13,7 +12,8 @@
         },
         {
             "id": 2,
-            "name": "Chocolate Buttermilk",
+            "name": "Buttermilk",
+            "description": "Chocolate / Maple / Glazed",
             "pointCost": 5
         },
         {
@@ -28,7 +28,7 @@
         },
         {
             "id": 5,
-            "name": "Chocolate or Vanilla Peanute Cake",
+            "name": "Chocolate or Vanilla Peanut Cake",
             "pointCost": 5
         },
         {
@@ -58,7 +58,8 @@
         },
         {
             "id": 11,
-            "name": "Cinnamon Sugar Twist",
+            "name": "Twist",
+            "description": "Sugar / Cinnamon Sugar",
             "pointCost": 5
         },
         {
@@ -73,76 +74,62 @@
         },
         {
             "id": 14,
-            "name": "Glazed Buttermilk",
-            "pointCost": 5
-        },
-        {
-            "id": 15,
             "name": "Glazed or Maple Old Fashion",
             "pointCost": 5
         },
         {
-            "id": 16,
+            "id": 15,
             "name": "Glazed Raised",
             "pointCost": 5
         },
         {
-            "id": 17,
+            "id": 16,
             "name": "Lavendar Cake",
             "pointCost": 5
         },
         {
-            "id": 18,
+            "id": 17,
             "name": "Lavendar Raised",
             "pointCost": 5
         },
         {
-            "id": 19,
+            "id": 18,
             "name": "Lemon Jelly Filled",
             "pointCost": 5
         },
         {
-            "id": 20,
-            "name": "Maple Buttermilk",
-            "pointCost": 5
-        },
-        {
-            "id": 21,
+            "id": 19,
             "name": "Maple Raised Bar",
             "pointCost": 5
         },
         {
-            "id": 22,
-            "name": "Mochi Donut",
+            "id": 20,
+            "name": "Mochi Donuts (Rotating Flavors)",
+            "description": "Oreo / Sugar / Matcha / Chocolate",
             "pointCost": 5
         },
         {
-            "id": 23,
+            "id": 21,
             "name": "Peanut Chocolate Raised",
             "pointCost": 5
         },
         {
-            "id": 24,
+            "id": 22,
             "name": "Raspberry Jelly Filled",
             "pointCost": 5
         },
         {
-            "id": 25,
+            "id": 23,
             "name": "Signature Coco Raised",
             "pointCost": 5
         },
         {
-            "id": 26,
-            "name": "Sugar Twist",
-            "pointCost": 5
-        },
-        {
-            "id": 27,
+            "id": 24,
             "name": "Vanilla Cake",
             "pointCost": 5
         },
         {
-            "id": 28,
+            "id": 25,
             "name": "Vanilla Coconut Cake",
             "pointCost": 5
         }

@@ -120,7 +120,40 @@ export default function App() {
   const _cacheAssetsAsync = async () => {
     try {
       const images = [require('./assets/dozendonuts.png'), 
-        require('./assets/windowlogo.jpg')
+        require('./assets/windowlogo.jpg'),
+        require('donuts/apple-fritter.jpg'),
+        require('donuts/bavarian-cream-filled.jpg'),
+        require('donuts/chocolate-buttermilk.jpg'),
+        require('donuts/chocolate-coconut-cake.jpg'),
+        require('donuts/chocolate-old-fashion.jpg'),
+        require('donuts/chocolate-or-vanilla-peanut-cake.jpg'),
+        require('donuts/chocolate-or-vanilla-sprinkle-cake.jpg'),
+        require('donuts/chocolate-raised-bar.jpg'),
+        require('donuts/chocolate-sprinkle-raised.jpg'),
+        require('donuts/cinnamon-roll.jpg'),
+        require('donuts/cinnamon-sugar-raised.jpg'),
+        require('donuts/cinnamon-sugar-twist.jpg'),
+        require('donuts/coconut-chocolate-raised.jpg'),
+        require('donuts/crumb-raised.jpg'),
+        require('donuts/glazed-buttermilk.jpg'),
+        require('donuts/glazed-or-maple-old-fashion.jpg'),
+        require('donuts/glazed-raised.jpg'),
+        require('donuts/lavendar-cake.jpg'),
+        require('donuts/lavender-raised.jpg'),
+        require('donuts/lemon-jelly-filled.jpg'),
+        require('donuts/maple-buttermilk.jpg'),
+        require('donuts/maple-raised-bar.jpg'),
+        require('donuts/mochi-oreo.jpg'),
+        require('donuts/peanut-chocolate-raised.jpg'),
+        require('donuts/raspberry-jelly-filled.jpg'),
+        require('donuts/signature-coco-raised.jpg'),
+        require('donuts/sugar-twist.jpg'),
+        require('donuts/vanilla-cake.jpg'),
+        require('donuts/vanilla-coconut-cake.jpg'),
+        require('donuts/placeholder.png'),
+        require('donuts/twist.gif'),
+        require('donuts/mochi-donuts.gif'),
+        require('donuts/buttermilk.gif')
       ]
 
       const cachedImages = images.map(image => {

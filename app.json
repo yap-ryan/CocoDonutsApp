@@ -31,6 +31,6 @@
     "web": {
       "favicon": "./client/assets/favicon.png"
     },
-    "description": "Coco Donuts app for rewards & game"
+    "description": "Coco Donuts app for rewards "
   }
 }

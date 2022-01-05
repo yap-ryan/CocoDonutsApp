@@ -245,14 +245,14 @@ router.patch('/:id', async (req,res) => {
         if (password != null && password != user.password){
 
             // New password must meet conditions
-            if (/^(?!.*[$ ])(?=.*?[A-Z])(?=.*?[0-9]).{8,15}$/.test(password)) {
+            if (/^(?!.*[$ ]).{7,15}$/.test(password)) {
                 // Conditions met, update password
                 user.password = password 
                 valueChanged = true
             } else {
                 res.json({
                     status: 'ERROR',
-                    message: 'Password must have at least 1 upper case, at least 1 digit, be 8-15 chracters long, and contain no $ or spaces'
+                    message: 'Password must be 7-15 chracters long, and contain no $ or spaces'
                 })
                 console.log('No Update: Password conditions not met')
             }

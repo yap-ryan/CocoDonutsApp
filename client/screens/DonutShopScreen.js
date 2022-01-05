@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, Alert } from 'react-native';
 import { ItemCardPressable } from './../components/styles'
 import { Colors } from './../components/styles';
@@ -8,6 +8,8 @@ import bavarianCreamFilledImg from 'donuts/bavarian-cream-filled.jpg'
 import axios from 'axios';
 import items from '../items.json'
 import requireImgSrc from '../itemImgSrcHelper'
+import { CredentialsContext } from '../components/CredentialsContext';
+
 
 const { brand, secondaryTextColor } = Colors;
 
@@ -16,30 +18,9 @@ const { brand, secondaryTextColor } = Colors;
  */
 function DonutShopScreen() {
 
-    // const [donutList, setDonutList] = useState([])
+    const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext)
 
-    // useEffect(() => {
-    //     console.log("First Render")
-    //     handleGetDonuts()
-    // }, [])
 
-    // let tempImg = ''
-
-    // // Will get all items of type 'donut'
-    // const handleGetDonuts = async () => {
-    //     const url = 'https://coco-donuts-heroku.herokuapp.com/items/'
-    //     try {
-    //         const resp = await axios.get(url)
-    //         const items = resp.data
-
-    //         tempImg = items[0].imgSrc
-    //         console.log(tempImg)
-    //         setDonutList(items)
-    //     } catch (err) {
-    //         console.log('error')
-    //         console.error(err)
-    //     }
-    // }
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -48,43 +29,6 @@ function DonutShopScreen() {
                     {items.donuts.map(donut => (
                         <ItemCard key={donut.id} itemId={donut.id} itemName={donut.name} pointCost={donut.pointCost} />
                     ))}
-                    
-                    {/*
-                    <ItemCard itemName='Apple Fritter' imgSrc={require(appFrit)} pointCost={5}/>
-                    <ItemCard itemName='Bavarian Cream Filled' imgSrc={bavarianCreamFilledImg} pointCost={5}/>
-                    <ItemCard itemName='Chocolate Buttermilk' imgSrc={require('../assets/donuts/chocolate-buttermilk.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Chocolate Coconut Cake' imgSrc={require('../assets/donuts/chocolate-coconut-cake.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Chocolate Old Fashion' imgSrc={require('../assets/donuts/chocolate-old-fashion.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Chocolate or Vanilla Peanut Cake' imgSrc={require('../assets/donuts/chocolate-or-vanilla-peanut-cake.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Chocolate or Vanilla Sprinkle Cake' imgSrc={require('../assets/donuts/chocolate-or-vanilla-sprinkle-cake.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Chocolate Raised Bar' imgSrc={require('../assets/donuts/chocolate-raised-bar.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Chocolate Sprinkle Raised' imgSrc={require('../assets/donuts/chocolate-sprinkle-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Cinnamon Roll' imgSrc={require('../assets/donuts/cinnamon-roll.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Cinnamon Sugar Raised' imgSrc={require('../assets/donuts/cinnamon-sugar-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Cinnamon Sugar Twist' imgSrc={require('../assets/donuts/cinnamon-sugar-twist.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Coconut Chocolate Raised' imgSrc={require('../assets/donuts/coconut-chocolate-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Crumb Raised' imgSrc={require('../assets/donuts/crumb-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Glazed Buttermilk' imgSrc={require('../assets/donuts/glazed-buttermilk.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Glazed or Maple Old Fashion' imgSrc={require('../assets/donuts/glazed-or-maple-old-fashion.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Glazed Raised' imgSrc={require('../assets/donuts/glazed-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Lavendar Cake' imgSrc={require('../assets/donuts/lavendar-cake.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Lavendar Raised' imgSrc={require('../assets/donuts/lavender-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Lemon Jelly Filled' imgSrc={require('../assets/donuts/lemon-jelly-filled.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Maple Buttermilk' imgSrc={require('../assets/donuts/maple-buttermilk.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Maple Raised Bar' imgSrc={require('../assets/donuts/maple-raised-bar.jpg')} pointCost={5}/>
-
-                    <ItemCard itemName='Mochi Chocolate' imgSrc={require('../assets/donuts/mochi-chocolate.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Mochi Matcha' imgSrc={require('../assets/donuts/mochi-matcha.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Mochi Oreo' imgSrc={require('../assets/donuts/mochi-oreo.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Mochi Sugar' imgSrc={require('../assets/donuts/mochi-sugar.jpg')} pointCost={5}/>
-
-                    <ItemCard itemName='Peanut Chocolate Raised' imgSrc={require('../assets/donuts/peanut-chocolate-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Raspberry Jelly Filled' imgSrc={require('../assets/donuts/raspberry-jelly-filled.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Signature Coco Raised' imgSrc={require('../assets/donuts/signature-coco-raised.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Sugar Twist' imgSrc={require('../assets/donuts/sugar-twist.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Vanilla Cake' imgSrc={require('../assets/donuts/vanilla-cake.jpg')} pointCost={5}/>
-                    <ItemCard itemName='Vanilla Coconut Cake' imgSrc={require('../assets/donuts/vanilla-coconut-cake.jpg')} pointCost={5}/> */}
-
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -92,8 +36,23 @@ function DonutShopScreen() {
     );
 }
 
+/**
+ *   This function should:
+ *      1. Check if user has enough points to redeem coupon
+ *      2. Create the 100% discount (free item) coupon code
+ *      3. Post request for coupon code to be added to user's account
+ */
+const redeemCoupon = (itemId) => {
 
-const createRedeemAlert = (itemName) => {
+}
+
+/**
+ *      Check if user has enough points to redeem coupon.
+ *      If user has enough points: create alert to confirm redeem and if confirm redeemCoupon()
+ *      else: create alert saying user does not have enough points
+ */
+const createRedeemAlert = async (itemName, itemId, pointCost) => {
+    
     Alert.alert(
         "Redeem Coupon",
         "1x " + itemName,
@@ -103,7 +62,7 @@ const createRedeemAlert = (itemName) => {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
             },
-            { text: "Redeem", onPress: () => console.log("Redeem Pressed") }
+            { text: "Redeem", onPress: () => redeemCoupon(itemId) }
         ]
     );
 }
@@ -111,10 +70,10 @@ const createRedeemAlert = (itemName) => {
 /**
  *  Component to display redeemable coupon item 
  */
-export const ItemCard = ({itemId, itemName, pointCost}) => {
+const ItemCard = ({itemId, itemName, pointCost}) => {
 
     return (
-        <ItemCardPressable onPress={() => createRedeemAlert(itemName)}>
+        <ItemCardPressable onPress={() => createRedeemAlert(itemName, itemId, pointCost)}>
             <Image
                 style={styles.itemImage}
                 source={requireImgSrc(itemId)}
