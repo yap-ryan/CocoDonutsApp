@@ -1,3 +1,4 @@
+import { HEROKU_BASE_URL } from '@env'
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
@@ -56,7 +57,7 @@ function AccountScreen() {
     // TODO: MAKE THIS FUNCTION
     const handleUpdateAccount = async (changedCredentials, setSubmitting) => {
 
-        const url = `https://coco-donuts-heroku.herokuapp.com/users/${storedCredentials._id}`
+        const url = HEROKU_BASE_URL  + `/users/${storedCredentials._id}`
 
         try {
             const resp = await axios.patch(url, changedCredentials)

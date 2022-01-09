@@ -1,4 +1,5 @@
 // Third Party imports
+import { HEROKU_BASE_URL } from '@env';
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -184,7 +185,7 @@ export default function App() {
 
         console.log(creds.id)
 
-        const url = `https://coco-donuts-heroku.herokuapp.com/users/${creds.id}`
+        const url = HEROKU_BASE_URL + `/users/${creds.id}`
         let updatedCreds;
 
         // Get updated credentials from server

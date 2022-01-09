@@ -1,4 +1,5 @@
 // Thirdy party imports
+import {HEROKU_BASE_URL} from '@env'
 import React from 'react';
 import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
@@ -44,7 +45,7 @@ function LoginScreen({ navigation }) {
     const handleLogin = async (credentials, setSubmitting) => {
         handleMessage(null) //Clear message
 
-        const url = 'https://coco-donuts-heroku.herokuapp.com/users/login'
+        const url = HEROKU_BASE_URL + '/users/login'
         try {
           const resp = await axios.post(url, credentials)
 

@@ -1,3 +1,4 @@
+import { HEROKU_BASE_URL } from '@env'
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios'
@@ -63,7 +64,7 @@ function SignUpScreen({ navigation }) {
     const handleSignup = async (credentials, setSubmitting) => {
         handleMessage(null) //Clear message
 
-        const url = 'https://coco-donuts-heroku.herokuapp.com/users/signup'
+        const url = HEROKU_BASE_URL + '/users/signup'
         try {
           const resp = await axios.post(url, credentials)
 

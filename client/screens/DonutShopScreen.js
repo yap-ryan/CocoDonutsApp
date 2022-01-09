@@ -20,7 +20,62 @@ function DonutShopScreen() {
 
     const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext)
 
+    /**
+     *   This function should:
+     *      1. Check if user has enough points to redeem coupon
+     *      2. Create the 100% discount (free item) coupon code
+     *      3. Post request for coupon code to be added to user's account
+     */
+    const redeemCoupon = (itemId) => {
 
+    }
+
+    /**
+     *      Check if user has enough points to redeem coupon.
+     *      If user has enough points: create alert to confirm redeem and if confirm redeemCoupon()
+     *      else: create alert saying user does not have enough points
+     */
+    const createRedeemAlert = async (itemName, itemId, pointCost) => {
+
+        if (storedCredentials.points < pointCost) {
+            Alert.alert(
+                "Insufficient Points",
+                "You need " + (pointCost - storedCredentials.points) + " more points to redeem this coupon!"
+            )
+        } else {
+            Alert.alert(
+                "Redeem Coupon",
+                "1x " + itemName,
+                [
+                    {
+                    text: "Cancel",
+                    style: "cancel"
+                    },
+                    { text: "Redeem", onPress: () => redeemCoupon(itemId) }
+                ]
+            )
+        }        
+       
+    }
+
+    /**
+     *  Component to display redeemable coupon item 
+     */
+    const ItemCard = ({itemId, itemName, pointCost}) => {
+
+        return (
+            <ItemCardPressable onPress={() => createRedeemAlert(itemName, itemId, pointCost)}>
+                <Image
+                    style={styles.itemImage}
+                    source={requireImgSrc(itemId)}
+                />
+                <View style={styles.itemPointsView}>
+                    <Text style={styles.itemPointsText}> {pointCost} pts </Text>
+                </View>
+                <Text style={styles.itemText}>{itemName} </Text>
+            </ItemCardPressable>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -36,55 +91,7 @@ function DonutShopScreen() {
     );
 }
 
-/**
- *   This function should:
- *      1. Check if user has enough points to redeem coupon
- *      2. Create the 100% discount (free item) coupon code
- *      3. Post request for coupon code to be added to user's account
- */
-const redeemCoupon = (itemId) => {
 
-}
-
-/**
- *      Check if user has enough points to redeem coupon.
- *      If user has enough points: create alert to confirm redeem and if confirm redeemCoupon()
- *      else: create alert saying user does not have enough points
- */
-const createRedeemAlert = async (itemName, itemId, pointCost) => {
-    
-    Alert.alert(
-        "Redeem Coupon",
-        "1x " + itemName,
-        [
-            {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-            },
-            { text: "Redeem", onPress: () => redeemCoupon(itemId) }
-        ]
-    );
-}
-
-/**
- *  Component to display redeemable coupon item 
- */
-const ItemCard = ({itemId, itemName, pointCost}) => {
-
-    return (
-        <ItemCardPressable onPress={() => createRedeemAlert(itemName, itemId, pointCost)}>
-            <Image
-                style={styles.itemImage}
-                source={requireImgSrc(itemId)}
-            />
-            <View style={styles.itemPointsView}>
-                <Text style={styles.itemPointsText}> {pointCost} pts </Text>
-            </View>
-            <Text style={styles.itemText}>{itemName} </Text>
-        </ItemCardPressable>
-    )
-}
 
 const styles = StyleSheet.create({
     safeAreaView: {
