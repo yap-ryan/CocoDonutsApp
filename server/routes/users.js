@@ -23,7 +23,7 @@ router.get('/', async (req,res) => {
     }
 })
 
-// Handle Get requests for individual users
+// Handle Get requests for individual users BY ID
 router.get('/:id', async (req,res) => {
     try{
         // Find user
@@ -38,6 +38,39 @@ router.get('/:id', async (req,res) => {
         console.error(err)
     }
 })
+
+// Handle Get requests for individual users BY PHONE
+// Could return multiple users but SHOULD ONLY RETURN 1 USER
+router.get('/phone/:phone', async (req,res) => {
+    try{
+        const user = await User.find({"phone": req.params.phone})
+
+        res.json(user)
+        console.log('Get Success')
+
+    } catch(err) {
+        res.json({
+            status: 'ERROR', message: 'Server Error' })
+        console.error(err)
+    }
+})
+
+// Handle Get requests for individual users BY EMAIL
+// Could return multiple users but SHOULD ONLY RETURN 1 USER
+router.get('/email/:email', async (req,res) => {
+    try{
+        const user = await User.find({"email": req.params.email})
+
+        res.json(user)
+        console.log('Get Success')
+
+    } catch(err) {
+        res.json({
+            status: 'ERROR', message: 'Server Error' })
+        console.error(err)
+    }
+})
+
 
 // Handle Signup Post requests
 router.post('/signup', async (req,res) => {
@@ -69,10 +102,10 @@ router.post('/signup', async (req,res) => {
             status: 'ERROR',
             message: 'Invalid phone number entered'
         })
-    } else if (! /^(?!.*[$ ])(?=.*?[A-Z])(?=.*?[0-9]).{8,15}$/.test(password)) {
+    } else if (! /^(?!.*[$ ]).{7,20}$/.test(password)) {
         res.json({
             status: 'ERROR',
-            message: 'Password must have at least 1 upper case, at least 1 digit, be 8-15 chracters long, and contain no $ or spaces'
+            message: 'Password must be 7-20 chracters long, and contain no $ or spaces'
         })
     } else {
         // Check if email and phone already being used before posting
@@ -102,7 +135,8 @@ router.post('/signup', async (req,res) => {
                             phone,
                             birthday: new Date(birthday),
                             password: hashedPassword,
-                            points: 0
+                            points: 0,
+                            coupons: []
                         }
                     )
 
@@ -171,7 +205,8 @@ router.post('/login', async (req,res) => {
                             email: user[0].email,
                             phone: user[0].phone,
                             birthday: user[0].birthday,
-                            points: user[0].points
+                            points: user[0].points,
+                            coupons: user[0].coupons
                         }
 
                         res.json({
@@ -216,7 +251,8 @@ router.post('/login', async (req,res) => {
 })
 
 
-// Handle Patch requests
+// Handle Patch requests BY ID 
+// Should only be used when a user is updating account info
 router.patch('/:id', async (req,res) => {
 
     let {name, email, phone, password} = req.body
@@ -245,14 +281,14 @@ router.patch('/:id', async (req,res) => {
         if (password != null && password != user.password){
 
             // New password must meet conditions
-            if (/^(?!.*[$ ]).{7,15}$/.test(password)) {
+            if (/^(?!.*[$ ]).{7,20}$/.test(password)) {
                 // Conditions met, update password
                 user.password = password 
                 valueChanged = true
             } else {
                 res.json({
                     status: 'ERROR',
-                    message: 'Password must be 7-15 chracters long, and contain no $ or spaces'
+                    message: 'Password must be 7-20 chracters long, and contain no $ or spaces'
                 })
                 console.log('No Update: Password conditions not met')
             }
@@ -319,6 +355,120 @@ router.patch('/:id', async (req,res) => {
 
 })
 
+// Handle Patch Requests for when customers Earn Coupons / Use Points  
+// This should be used when customer redeems coupons in the point shop (DonutShopScreen or CoffeeShopScreen)
+router.patch('/addCoupon/:id', async (req,res) => {
+    
+    // REQUIRED: couponToAdd (we never need to deduct points without other actions)
+    let {couponToAdd, pointCost} = req.body
+
+    try {
+        const user = await User.findById(req.params.id)
+
+        let endingBal = user.points
+        
+        if (pointCost) {
+            endingBal = endingBal - pointCost
+        }
+
+        // Check if user has enough points, if not, respon w/ error msg
+        if (endingBal < 0) {
+            res.json({
+                status: 'ERROR',
+                message: 'Error: User does not have enough points'
+            })
+            console.log('Error: User deos not have enough points')
+        } else {
+            try {
+                // Update user's coupons & points
+                const result = await User.updateOne(
+                    { "_id": req.params.id },
+                    { $set: { "points": endingBal }, $push: { "coupons": couponToAdd } }
+                ) 
+    
+                res.json({
+                    status: 'SUCCESS',
+                    message: 'Customer account successfully updated',
+                    data: result
+                })
+                console.log('Update Successful')
+            } catch (err) {
+                res.json({
+                    status: 'ERROR', message: 'Error saving data to user account' })
+                console.error(err)
+            }     
+        }
+         
+    } catch (err) {
+        res.json({
+            status: 'ERROR', message: 'Error finding user' })
+        console.error(err)
+    }
+})
+
+
+// Handle Patch Requests for when customers Use Coupon / Earn Points 
+// This should be used when customer uses their coupons or earn points at point of sale
+// Request should come from a Cashier user at point of sale
+router.patch('/pointOfSale/:id', async (req,res) => {
+    
+    let {couponToRemove, pointsEarned} = req.body
+    try {
+        const user = await User.findById(req.params.id)
+
+        let couponFound = false
+
+        // Search for coupon in user account if couponToRemove in req.body
+        if (couponToRemove) {
+            // Find couponToRemove in user.coupons
+            for (const coupon of user.coupons) {
+                if (coupon === couponToRemove) {
+                    couponFound = true
+                    break
+                }
+            }
+        }        
+
+        // If coupon code was in body AND not found in account, respond with an error message
+        if (couponToRemove && couponFound === false) {
+            res.json({
+                status: 'ERROR', message: 'Coupon not found on user account' })
+            console.error(err)
+        } else {
+
+            let endingBal = user.points
+
+            if (pointsEarned) {
+                endingBal = user.points + pointsEarned
+            }
+
+            try {
+                const result = await User.updateOne(
+                    { "_id": req.params.id },
+                    { $set: { "points": endingBal }, $pull: { "coupons": couponToRemove } }
+                ) 
+
+                res.json({
+                    status: 'SUCCESS',
+                    message: 'Customer account successfully updated',
+                    data: result
+                })
+                console.log('Update Successful')
+            } catch (err) {
+                res.json({
+                    status: 'ERROR', message: 'Error saving data to user account' })
+                console.error(err)
+            }    
+        }
+        return
+    } catch (err) {
+        res.json({
+            status: 'ERROR', message: 'Error finding user' })
+        console.error(err)
+    }
+})
+
+
 // Handle Delete requests
 router.delete('/:id', async (req,res) => {
     try {
@@ -330,7 +480,6 @@ router.delete('/:id', async (req,res) => {
         res.json({
             status: 'ERROR', message: 'Server Error when trying to delete user' })
         console.error(err)
-
     }
 })
 

@@ -22,18 +22,20 @@ function DonutShopScreen() {
 
     /**
      *   This function should:
-     *      1. Check if user has enough points to redeem coupon
-     *      2. Create the 100% discount (free item) coupon code
-     *      3. Post request for coupon code to be added to user's account
+     *      1. Create the 100% discount (free item) coupon code
+     *      2. Post request for coupon code to be added to user's account
      */
-    const redeemCoupon = (itemId) => {
-
+    const redeemCoupon = (itemId, pointCost) => {
+        
     }
 
     /**
      *      Check if user has enough points to redeem coupon.
      *      If user has enough points: create alert to confirm redeem and if confirm redeemCoupon()
      *      else: create alert saying user does not have enough points
+     * 
+     *      NOTE: Points are updated in BACKEND, do not update user's points in Frontend
+     * 
      */
     const createRedeemAlert = async (itemName, itemId, pointCost) => {
 
@@ -51,7 +53,7 @@ function DonutShopScreen() {
                     text: "Cancel",
                     style: "cancel"
                     },
-                    { text: "Redeem", onPress: () => redeemCoupon(itemId) }
+                    { text: "Redeem", onPress: () => redeemCoupon(itemId, pointCost) }
                 ]
             )
         }        

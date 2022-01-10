@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
         points: {
             type: Number,
             required: true
+        },
+        coupons: {
+            type: Array,
+            required: true
         }
     }
 )
