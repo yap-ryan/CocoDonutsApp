@@ -38,7 +38,6 @@ function DonutShopScreen() {
      * 
      */
     const createRedeemAlert = async (itemName, itemId, pointCost) => {
-
         if (storedCredentials.points < pointCost) {
             Alert.alert(
                 "Insufficient Points",
@@ -57,7 +56,6 @@ function DonutShopScreen() {
                 ]
             )
         }        
-       
     }
 
     /**
@@ -67,10 +65,12 @@ function DonutShopScreen() {
 
         return (
             <ItemCardPressable onPress={() => createRedeemAlert(itemName, itemId, pointCost)}>
-                <Image
-                    style={styles.itemImage}
-                    source={requireImgSrc(itemId)}
-                />
+                <View style={styles.itemImageView}>
+                    <Image
+                        style={styles.itemImage}
+                        source={requireImgSrc(itemId)}
+                    />
+                </View>
                 <View style={styles.itemPointsView}>
                     <Text style={styles.itemPointsText}> {pointCost} pts </Text>
                 </View>
@@ -105,9 +105,17 @@ const styles = StyleSheet.create({
         margin: '2.5%'
     },
     itemImage: {
+        height: '92%',
+        width: '92%',
+        borderRadius: 7
+    },
+    itemImageView: {
         height: '73%',
         width: '99.9%',
-        borderRadius: 6
+        borderRadius: 7,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     itemText: {
         fontSize: 16,

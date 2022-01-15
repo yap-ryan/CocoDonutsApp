@@ -1,5 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Modal, Pressable, View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
+
 import { Colors } from './../components/styles';
 import items from '../items.json'
 import requireImgSrc from '../itemImgSrcHelper'
@@ -11,12 +14,16 @@ const { brand, secondaryTextColor } = Colors;
  */
 function CouponScreen() {
 
+    const [popUpVisible, setPopUpVisible] = useState(false)
+    const [qrCode, setQrCode] = useState("")
+    const [selectedItem, setSelectedItem] = useState("")
     const testCouponCodeList = ["0#0#123#0","5#50#123#0", "20#50#123#2022-10-05T07:00:00.000Z"]
 
     return (
-        <ScrollView>
+        <ScrollView >
+            <QrCodePopUp qrCode={qrCode} selectedItem={selectedItem} popUpVisible={popUpVisible} setPopUpVisible={setPopUpVisible}/>
             <View style={styles.listingContainer}>
-                {testCouponCodeList.map((code, index) => displayCoupon(code, index))}
+                {testCouponCodeList.map((code, index) => displayCoupon(code, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem))}
             </View>
         </ScrollView>
     );
@@ -36,7 +43,7 @@ function CouponScreen() {
  *    '#': Seperator
  * 
  */
- const displayCoupon = (couponCode, index) => {
+    const displayCoupon = (couponCode, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem) => {
     const data = couponCode.split("#")
     const itemID = parseInt(data[0])
     const discount = parseInt(data[1])
@@ -55,6 +62,10 @@ function CouponScreen() {
                     expDate={expDate} 
                     itemName={items.donuts[i].name} 
                     couponCode={couponCode}
+                    popUpVisible={popUpVisible}
+                    setPopUpVisible={setPopUpVisible}
+                    setQrCode={setQrCode}
+                    setSelectedItem={setSelectedItem}
                 />
             )
         }
@@ -71,6 +82,10 @@ function CouponScreen() {
                     expDate={expDate} 
                     itemName={items.coffee[j].name} 
                     couponCode={couponCode}
+                    popUpVisible={popUpVisible}
+                    setPopUpVisible={setPopUpVisible}
+                    setQrCode={setQrCode}
+                    setSelectedItem={setSelectedItem}
                 />
             )
         }
@@ -80,12 +95,52 @@ function CouponScreen() {
     )  
 }
 
+// Component for pop up that displays a coupon's QR Code
+const QrCodePopUp = ({qrCode, selectedItem, popUpVisible, setPopUpVisible}) => {
+    const logoImg = require('../assets/cocorounded.png');
+
+    return (
+        <Modal
+            visible={popUpVisible}
+            animationType="slide"
+            statusBarTranslucent={true}
+            transparent={true}
+            onRequestClose={() => {
+                setPopUpVisible(!popUpVisible);
+            }}
+        >
+            <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+                <Text style={styles.modalHeader}>Show to Cashier</Text>
+                <Text style={styles.modalText}> {selectedItem}</Text>
+                <QRCode value={qrCode} logo={logoImg} size={190}/>
+                <Text style={styles.modalCodeText}>{qrCode}</Text>
+                <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setPopUpVisible(!popUpVisible)}
+                >
+                <Text style={styles.textStyle}>Close QR Code</Text>
+                </Pressable>
+            </View>
+            </View>
+        </Modal>
+    )
+}
+
+
 /**
  *  Coupon display component
  */
-const CouponCard = ({itemID, discount, userID, expDate, itemName, couponCode}) => {
+const CouponCard = ({itemID, discount, userID, expDate, itemName, couponCode, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem}) => {
+
+    const handleCardPress = () => {
+        setPopUpVisible(true) 
+        setQrCode(couponCode)
+        setSelectedItem(itemName)
+    }
+
     return (
-        <TouchableOpacity style={styles.couponCard}>
+        <TouchableOpacity style={styles.couponCard} onPress={() => handleCardPress()}>
             <Image
                 style={styles.couponImage}
                 source={requireImgSrc(itemID)}
@@ -179,7 +234,62 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'DMSans-Regular',
         color: '#9c9895'
-    }
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 15,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: "85%"
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+      },
+      buttonClose: {
+        backgroundColor: brand,
+      },
+      textStyle: {
+        color: "white",
+        fontFamily: 'DMSans-Regular',
+        textAlign: "center"
+      },
+      modalCodeText: {
+        marginVertical: 15,
+        fontFamily: 'DMSans-Regular',
+        textAlign: "center"
+      },
+      modalHeader: {
+        marginBottom: 5,
+        fontFamily: 'DMSans-Bold',
+        textAlign: "center",
+        fontSize: 18
+
+      },
+      modalText: {
+        marginBottom: 20,
+        fontFamily: 'DMSans-Regular',
+        textAlign: "center",
+        fontSize: 16
+        
+      }
 })
 
 export default CouponScreen;

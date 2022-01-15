@@ -134,7 +134,7 @@ function LoginScreen({ navigation }) {
                     )}
                     {isSubmitting && (
                         <StyledButton disabled={true}>
-                            <ActivityIndicator size="large" animating={true} color={brand} />
+                            <ActivityIndicator size="large" animating={true} color="white" />
                         </StyledButton>
                     )}
                     

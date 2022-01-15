@@ -32,7 +32,7 @@ const HomeStack = createStackNavigator()
 const HomeStackScreen = () => {
   return(
   <HomeStack.Navigator>
-    <HomeStack.Screen name="Home" component={HomeScreen} 
+    <HomeStack.Screen name="HomeScreen" component={HomeScreen} 
       options={{ headerShown: false, animationEnabled: false }} />
     <HomeStack.Screen name="Coupons" component={CouponScreen} 
       options={{ animationEnabled: false }}/>
@@ -64,13 +64,14 @@ const Tabs = createBottomTabNavigator()
 const TabsScreen = () => {
   return (
     <Tabs.Navigator initialRouteName='Home' 
-      tabBarOptions={{
-        labelStyle: {
+      screenOptions={{
+        tabBarLabelStyle: {
           ...styles.navtext
         },
-        activeTintColor: '#feadd6',
+        tabBarActiveTintColor: '#feadd6'
       }}>
       <Tabs.Screen name="Home" component={HomeStackScreen} options={{
+        headerShown: false,
         tabBarIcon: ({ focused} ) => (
           <Icon name="home" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
         )
@@ -81,6 +82,7 @@ const TabsScreen = () => {
         )
         }}/> */}
       <Tabs.Screen name="Account" component={AccountScreen} options={{
+        headerShown: false,
         tabBarIcon: ({ focused} ) => (
           <Icon name="person-circle" size={25} color={focused ? '#feadd6' : '#a3a3a3'} />
         )
@@ -94,13 +96,13 @@ const RootStackScreen = () => {
   return (
     <CredentialsContext.Consumer>
       {({storedCredentials, setStoredCredentials}) => (
-        <RootStack.Navigator headerMode='none'>
+        <RootStack.Navigator>
         {/* If there are storedCredentials (already logged in) render
           main app Tab Navigation Screens else render Authentication Stack*/}
         { storedCredentials ? (
-          <RootStack.Screen name='App' component={TabsScreen} />
+          <RootStack.Screen name='App' component={TabsScreen} options={{headerShown: false}}/>
         ) : (
-          <RootStack.Screen name='Auth' component={AuthStackScreen}/>
+          <RootStack.Screen name='Auth' component={AuthStackScreen} options={{headerShown: false}}/>
         )}
       </RootStack.Navigator>
       )}
@@ -217,6 +219,7 @@ export default function App() {
     try {
       await _cacheAssetsAsync()
       await checkLoginCreds()
+      
     } catch (err) {
       console.error('Error with app loading: \n' + err)
     }
@@ -230,6 +233,7 @@ export default function App() {
       onError={console.warn}
     /> 
   }
+
   
   return (
     <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials}}>

@@ -192,7 +192,7 @@ function AccountScreen() {
                     )}
                     {isSubmitting && (
                     <StyledButton disabled={true}>
-                        <ActivityIndicator size="large" color={brand} />
+                        <ActivityIndicator size="large" color="white" />
                     </StyledButton>
                     )}
 
