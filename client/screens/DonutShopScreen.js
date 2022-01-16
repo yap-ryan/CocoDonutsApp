@@ -1,7 +1,9 @@
 import React from 'react';
 import { useContext } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, Alert } from 'react-native';
+
 
 import { ItemCardPressable } from './../components/styles'
 import { Colors } from './../components/styles';
@@ -40,12 +42,27 @@ function DonutShopScreen() {
         try {
             const resp = await axios.patch(url, body)
             const result = resp.data
-            const {message, status} = result
+            const {message, status, data} = result
+            console.log(data)
 
-            if (status !== 'SUCCESS') {
-                console.log('UPDATE FAILED with message: ')
+            if (status == 'SUCCESS') {
+                const { couponAdded, newPointBal } = data
+                
+                storedCredentials.coupons.push(couponAdded)
+                storedCredentials.points = newPointBal
+    
+                console.log(storedCredentials)
+    
+                try{
+                    await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(storedCredentials))
+                    setStoredCredentials(storedCredentials)
+                } catch (err) {
+                    console.error(err)
+                }         
+         
                 console.log(message + '\n')
             } else {
+                console.log('UPDATE FAILED with message: ')
                 console.log(message + '\n')
             }            
 

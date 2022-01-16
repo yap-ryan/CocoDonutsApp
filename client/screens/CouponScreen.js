@@ -1,11 +1,12 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { StyleSheet, Modal, Pressable, View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 import { Colors } from './../components/styles';
 import items from '../items.json'
 import requireImgSrc from '../itemImgSrcHelper'
+import { CredentialsContext } from '../components/CredentialsContext';
 
 const { brand, secondaryTextColor } = Colors;
 
@@ -14,18 +15,20 @@ const { brand, secondaryTextColor } = Colors;
  */
 function CouponScreen() {
 
+    const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext)
     const [popUpVisible, setPopUpVisible] = useState(false)
 
     // qrCode is an array where index 0 = code to display as QR code & index 1 = coupon ID
     const [qrCode, setQrCode] = useState(["",""])
     const [selectedItem, setSelectedItem] = useState("")
     const testCouponCodeList = ["0#0#0#ABC123","5#50#0#0", "20#50#2022-10-05T07:00:00.000Z#0"]
+    const couponList = storedCredentials.coupons
 
     return (
         <ScrollView >
             <QrCodePopUp qrCode={qrCode} selectedItem={selectedItem} popUpVisible={popUpVisible} setPopUpVisible={setPopUpVisible}/>
             <View style={styles.listingContainer}>
-                {testCouponCodeList.map((code, index) => displayCoupon(code, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem))}
+                {couponList.map((code, index) => displayCoupon(code, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem))}
             </View>
         </ScrollView>
     );
@@ -45,7 +48,7 @@ function CouponScreen() {
  *    '#': Seperator
  * 
  */
-    const displayCoupon = (couponCode, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem) => {
+const displayCoupon = (couponCode, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem) => {
     const data = couponCode.split("#")
     const itemID = parseInt(data[0])
     const discount = parseInt(data[1])
@@ -223,14 +226,12 @@ const styles = StyleSheet.create({
     },
     couponDiscountTag: {
         backgroundColor: '#ffd4ea',
-        height: 27,
+        height: 25,
         width: 130,
         borderRadius: 3,
-        paddingVertical: 5,
-        paddingHorizontal: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 2.5
+        marginBottom: 5
     },
     couponExpiryText: {
         fontSize: 14,

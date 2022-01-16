@@ -399,7 +399,11 @@ router.patch('/addCoupon/:id', async (req,res) => {
                 ) 
     
                 res.json({
-                    status: 'SUCCESS', message: 'Customer account successfully updated', data: result
+                    status: 'SUCCESS', message: 'Customer account successfully updated', 
+                    data: { 
+                        "couponAdded": couponToAdd,
+                        "newPointBal": endingBal
+                    }
                 })
                 console.log('Update Successful')
             } catch (err) {
