@@ -1,15 +1,14 @@
 import React from 'react';
 import { useContext } from 'react';
+import axios from 'axios';
 import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, Alert } from 'react-native';
+
 import { ItemCardPressable } from './../components/styles'
 import { Colors } from './../components/styles';
-import appleFritterImg from 'donuts/apple-fritter.jpg'
-import bavarianCreamFilledImg from 'donuts/bavarian-cream-filled.jpg'
-import axios from 'axios';
 import items from '../items.json'
 import requireImgSrc from '../itemImgSrcHelper'
 import { CredentialsContext } from '../components/CredentialsContext';
-
+import { HEROKU_BASE_URL } from '@env'
 
 const { brand, secondaryTextColor } = Colors;
 
@@ -25,9 +24,36 @@ function DonutShopScreen() {
      *      1. Create the 100% discount (free item) coupon code
      *      2. Post request for coupon code to be added to user's account
      */
-    const redeemCoupon = (itemId, pointCost) => {
-        
-    }
+    const handleRedeemCoupon = async (itemId, pointCost) => {
+        const url = HEROKU_BASE_URL  + `/users/addCoupon/${storedCredentials._id}`
+
+        // NOTE: The coupon code is completed in the backend where a unique coupon id is set 
+        // FullCode =  PartialCode + "#" + UniqueID
+        // Partial Coupon Code Format: <ItemID>#<Discount%>#<Expiry>
+        const couponCode = '' + itemId + '#' + 0 + '#' + 0 
+
+        const body = {
+            couponToAdd: couponCode,
+            pointCost: pointCost
+        }
+
+        try {
+            const resp = await axios.patch(url, body)
+            const result = resp.data
+            const {message, status} = result
+
+            if (status !== 'SUCCESS') {
+                console.log('UPDATE FAILED with message: ')
+                console.log(message + '\n')
+            } else {
+                console.log(message + '\n')
+            }            
+
+        } catch (err) {
+            console.error(err)
+        }
+
+    } 
 
     /**
      *      Check if user has enough points to redeem coupon.
@@ -52,7 +78,7 @@ function DonutShopScreen() {
                     text: "Cancel",
                     style: "cancel"
                     },
-                    { text: "Redeem", onPress: () => redeemCoupon(itemId, pointCost) }
+                    { text: "Redeem", onPress: () => handleRedeemCoupon(itemId, pointCost) }
                 ]
             )
         }        

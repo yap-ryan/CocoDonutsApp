@@ -10,6 +10,7 @@ const app = express()
 
 mongoose.connect(MONGODB_URI, {useNewUrlParser:true, useUnifiedTopology: true})
 
+
 const db = mongoose.connection
 
 // Event listeners for database 

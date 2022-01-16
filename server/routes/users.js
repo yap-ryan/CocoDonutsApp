@@ -7,6 +7,10 @@ const User = require('../models/user')
 // Password hashing handler
 const bcrypt = require('bcrypt')
 
+
+// ______________________GET_______________________________
+
+
 // All requests should be async to prevent process blocking
 // Handle Get requests for ALL users
 router.get('/', async (req,res) => {
@@ -70,6 +74,9 @@ router.get('/email/:email', async (req,res) => {
         console.error(err)
     }
 })
+
+
+// ______________________POST_______________________________
 
 
 // Handle Signup Post requests
@@ -251,6 +258,9 @@ router.post('/login', async (req,res) => {
 })
 
 
+// ______________________PATCH___________________________________
+
+
 // Handle Patch requests BY ID 
 // Should only be used when a user is updating account info
 router.patch('/:id', async (req,res) => {
@@ -362,6 +372,9 @@ router.patch('/addCoupon/:id', async (req,res) => {
     // REQUIRED: couponToAdd (we never need to deduct points without other actions)
     let {couponToAdd, pointCost} = req.body
 
+    // Complete coupon code by adding 'unique' coupon ID to it
+    couponToAdd = setCouponId(couponToAdd)
+
     try {
         const user = await User.findById(req.params.id)
 
@@ -374,8 +387,7 @@ router.patch('/addCoupon/:id', async (req,res) => {
         // Check if user has enough points, if not, respon w/ error msg
         if (endingBal < 0) {
             res.json({
-                status: 'ERROR',
-                message: 'Error: User does not have enough points'
+                status: 'ERROR', message: 'Error: User does not have enough points'
             })
             console.log('Error: User deos not have enough points')
         } else {
@@ -387,9 +399,7 @@ router.patch('/addCoupon/:id', async (req,res) => {
                 ) 
     
                 res.json({
-                    status: 'SUCCESS',
-                    message: 'Customer account successfully updated',
-                    data: result
+                    status: 'SUCCESS', message: 'Customer account successfully updated', data: result
                 })
                 console.log('Update Successful')
             } catch (err) {
@@ -467,6 +477,31 @@ router.patch('/pointOfSale/:id', async (req,res) => {
         console.error(err)
     }
 })
+
+/**
+ *  This function should take in a partial coupon code (includes itemID, discount, expiry)
+ *   and add a unique(highly random and hopefully unique) coupon id to the end of the coupon code.
+ *   
+ *  The purpose of a coupon ID is to let customers give the ID to cashier if the QR code for some reason does not work
+ */
+const setCouponId = (partialCode) => {
+
+    // Length of Coupon ID (Longer better, BUT less efficient at Point of Sale)
+    const length = 6
+
+    // Declare all characters that may appear in Coupon ID
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
+    // Pick characers randomly
+    let couponId = '';
+    for (let i = 0; i < length; i++) {
+        couponId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return partialCode + '#' + couponId
+} 
+
+
 
 
 // Handle Delete requests

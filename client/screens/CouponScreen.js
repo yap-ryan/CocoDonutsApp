@@ -15,9 +15,11 @@ const { brand, secondaryTextColor } = Colors;
 function CouponScreen() {
 
     const [popUpVisible, setPopUpVisible] = useState(false)
-    const [qrCode, setQrCode] = useState("")
+
+    // qrCode is an array where index 0 = code to display as QR code & index 1 = coupon ID
+    const [qrCode, setQrCode] = useState(["",""])
     const [selectedItem, setSelectedItem] = useState("")
-    const testCouponCodeList = ["0#0#123#0","5#50#123#0", "20#50#123#2022-10-05T07:00:00.000Z"]
+    const testCouponCodeList = ["0#0#0#ABC123","5#50#0#0", "20#50#2022-10-05T07:00:00.000Z#0"]
 
     return (
         <ScrollView >
@@ -38,8 +40,8 @@ function CouponScreen() {
  *      
  *    'A': Item ID 
  *    'B': Percentage Discount represented by 1-2 digits (0-99 with 0 meaning 100% off)
- *    'C': User/Customer ID
- *    'D': Expiration Date in ISO 8601 format ('0' if no expiration date)
+ *    'C': Expiration Date in ISO 8601 format ('0' if no expiration date)
+ *    'D': Coupon ID (Unqiue to the user) 
  *    '#': Seperator
  * 
  */
@@ -47,8 +49,8 @@ function CouponScreen() {
     const data = couponCode.split("#")
     const itemID = parseInt(data[0])
     const discount = parseInt(data[1])
-    const userID = data[2]
-    const expDate = data[3]
+    const expDate = data[2]
+    const couponID = data[3]
 
     // Look through all donuts for itemID match
     for (let i in items.donuts) {
@@ -58,8 +60,8 @@ function CouponScreen() {
                     key={index}
                     itemID={itemID} 
                     discount={discount} 
-                    userID={userID} 
                     expDate={expDate} 
+                    couponID={couponID}
                     itemName={items.donuts[i].name} 
                     couponCode={couponCode}
                     popUpVisible={popUpVisible}
@@ -78,8 +80,8 @@ function CouponScreen() {
                     key={index}
                     itemID={itemID} 
                     discount={discount} 
-                    userID={userID} 
                     expDate={expDate} 
+                    couponID={couponID}
                     itemName={items.coffee[j].name} 
                     couponCode={couponCode}
                     popUpVisible={popUpVisible}
@@ -113,8 +115,8 @@ const QrCodePopUp = ({qrCode, selectedItem, popUpVisible, setPopUpVisible}) => {
             <View style={styles.modalView}>
                 <Text style={styles.modalHeader}>Show to Cashier</Text>
                 <Text style={styles.modalText}> {selectedItem}</Text>
-                <QRCode value={qrCode} logo={logoImg} size={190}/>
-                <Text style={styles.modalCodeText}>{qrCode}</Text>
+                <QRCode value={qrCode[0]} logo={logoImg} size={190}/>
+                <Text style={styles.modalCodeText}>Code: {qrCode[1]}</Text>
                 <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setPopUpVisible(!popUpVisible)}
@@ -131,11 +133,11 @@ const QrCodePopUp = ({qrCode, selectedItem, popUpVisible, setPopUpVisible}) => {
 /**
  *  Coupon display component
  */
-const CouponCard = ({itemID, discount, userID, expDate, itemName, couponCode, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem}) => {
+const CouponCard = ({itemID, discount, expDate, couponID, itemName, couponCode, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem}) => {
 
     const handleCardPress = () => {
         setPopUpVisible(true) 
-        setQrCode(couponCode)
+        setQrCode([couponCode,couponID])
         setSelectedItem(itemName)
     }
 
@@ -272,8 +274,9 @@ const styles = StyleSheet.create({
         textAlign: "center"
       },
       modalCodeText: {
+        fontSize: 18,
         marginVertical: 15,
-        fontFamily: 'DMSans-Regular',
+        fontFamily: 'DMSans-Medium',
         textAlign: "center"
       },
       modalHeader: {
