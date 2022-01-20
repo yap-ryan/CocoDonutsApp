@@ -22,14 +22,23 @@ function CouponScreen() {
     const [qrCode, setQrCode] = useState(["",""])
     const [selectedItem, setSelectedItem] = useState("")
     const testCouponCodeList = ["0#0#0#ABC123","5#50#0#0", "20#50#2022-10-05T07:00:00.000Z#0"]
-    const couponList = storedCredentials.coupons
+    const couponList = storedCredentials ? storedCredentials.coupons : []
 
     return (
         <ScrollView >
             <QrCodePopUp qrCode={qrCode} selectedItem={selectedItem} popUpVisible={popUpVisible} setPopUpVisible={setPopUpVisible}/>
-            <View style={styles.listingContainer}>
-                {couponList.map((code, index) => displayCoupon(code, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem))}
-            </View>
+            { couponList.length > 0 ? (
+                <View style={styles.listingContainer}>
+                    {couponList.map((code, index) => displayCoupon(code, index, popUpVisible, setPopUpVisible, setQrCode, setSelectedItem))}
+                </View>
+            ) : (
+                <View style={styles.emptyCouponListView}>
+                    <Text style={styles.emptyCouponListText}>
+                        Your coupons will appear here.
+                    </Text>
+                </View>
+            )}
+            
         </ScrollView>
     );
 }
@@ -238,14 +247,24 @@ const styles = StyleSheet.create({
         fontFamily: 'DMSans-Regular',
         color: '#9c9895'
     },
+    emptyCouponListView: {
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 60
+    },
+    emptyCouponListText: {
+        fontSize: 16,
+        fontFamily: 'DMSans-Regular',
+        color: '#9c9895'
+    },
 
     centeredView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         backgroundColor: "white",
         borderRadius: 15,

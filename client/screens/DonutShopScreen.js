@@ -1,7 +1,9 @@
 import React from 'react';
 import { useContext } from 'react';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+
 import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, Alert } from 'react-native';
 
 
@@ -43,18 +45,18 @@ function DonutShopScreen() {
             const resp = await axios.patch(url, body)
             const result = resp.data
             const {message, status, data} = result
-            console.log(data)
 
             if (status == 'SUCCESS') {
                 const { couponAdded, newPointBal } = data
                 
                 storedCredentials.coupons.push(couponAdded)
                 storedCredentials.points = newPointBal
-    
-                console.log(storedCredentials)
+                // console.log(storedCredentials)
     
                 try{
-                    await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(storedCredentials))
+                    // await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(storedCredentials))
+                    await SecureStore.setItemAsync('cocoAppCredentials', JSON.stringify(storedCredentials))
+
                     setStoredCredentials(storedCredentials)
                 } catch (err) {
                     console.error(err)

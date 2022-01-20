@@ -2,7 +2,8 @@ import { HEROKU_BASE_URL } from '@env'
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
 
@@ -47,7 +48,8 @@ function AccountScreen() {
     // Clear storedCredentials state and async storage on logout
     const clearCredentialsOnLogout = async () => {
         try {
-            await AsyncStorage.removeItem('cocoAppCredentials')
+            // await AsyncStorage.removeItem('cocoAppCredentials')
+            await SecureStore.deleteItemAsync('cocoAppCredentials')
             setStoredCredentials(null)
         } catch (err) {
             console.error(err)
@@ -73,9 +75,7 @@ function AccountScreen() {
                 presistLogin({...data}, message, status)
             }
 
-
             setSubmitting(false)
-
         } catch (err) {
             setSubmitting(false)
             handleMessage('Connection error. Check your network and try again.')
@@ -93,7 +93,9 @@ function AccountScreen() {
 
     const presistLogin = async (credentials, msg, status) => {
         try {
-            await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+            // await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+            await SecureStore.setItemAsync('cocoAppCredentials', JSON.stringify(credentials))
+
             handleMessage(msg, status)
             setStoredCredentials(credentials)
         } catch (err) {

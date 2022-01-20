@@ -4,7 +4,9 @@ import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'rea
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+
 import { StatusBar } from 'expo-status-bar';
 // Datetimepicker
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -95,7 +97,9 @@ function SignUpScreen({ navigation }) {
 
     const presistLogin = async (credentials, msg, status) => {
       try {
-        await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+        // await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+        await SecureStore.setItemAsync('cocoAppCredentials',JSON.stringify(credentials))
+
         handleMessage(msg, status)
         setStoredCredentials(credentials)
       } catch (err) {

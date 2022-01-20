@@ -5,7 +5,8 @@ import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIn
 import { Formik } from 'formik';
 import { Ionicons } from 'react-native-vector-icons';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 
 
@@ -74,7 +75,9 @@ function LoginScreen({ navigation }) {
 
     const presistLogin = async (credentials, message, status) => {
       try {
-        await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+        // await AsyncStorage.setItem('cocoAppCredentials',JSON.stringify(credentials))
+        await SecureStore.setItemAsync('cocoAppCredentials',JSON.stringify(credentials))
+
         handleMessage(message, status)
         setStoredCredentials(credentials)
       } catch (err) {

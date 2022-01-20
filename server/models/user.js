@@ -1,5 +1,28 @@
 const mongoose = require('mongoose')
 
+/**
+ *      ROLES (Seperate interfaces for each):
+ *          - Customer: 'customer'
+ *          - Cashier (Admin): 'cashier'
+ * 
+ *      Customer User Properties:
+ *          - name
+ *          - email
+ *          - phone
+ *          - birthday
+ *          - password
+ *          - points
+ *          - coupons
+ *          - role
+ * 
+ *      Cashier User Properties (Will include other properties eg points & coupons, it just wont be used):
+ *          - name
+ *          - email ? for login only
+ *          - phone ? for login only
+ *          - password
+ *          - role
+ */
+
 const userSchema = new mongoose.Schema(
     {
         name: {
@@ -29,6 +52,10 @@ const userSchema = new mongoose.Schema(
         },
         coupons: {
             type: Array,
+            required: true
+        },
+        role: {
+            type: String,   // Either: 'customer' or 'cashier'
             required: true
         }
     }

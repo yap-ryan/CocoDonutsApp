@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native'
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, StatusBar } from 'react-native';
 // import { StatusBar } from 'expo-status-bar';
 
@@ -15,6 +16,13 @@ function HomeScreen({ navigation }) {
 
     const {storedCredentials} = React.useContext(CredentialsContext)
     console.log('Stored Credentials: ' + JSON.stringify(storedCredentials) + '\n')
+
+    const isFocused = useIsFocused()
+
+    React.useEffect(() => {
+        // USED TO CAUSE RERENDER(& therefore update storedCredentials) WHEN WE NAVIGATE(or 'Focus') BACK TO HOME SCREEN
+        // IE. If user redeems a coupon on the DonutShopScreen and comes back, we need to updated the user's points displayed
+    }, [isFocused])
     
     return (
     <>

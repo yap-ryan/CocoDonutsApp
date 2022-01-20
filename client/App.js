@@ -2,7 +2,8 @@
 import { HEROKU_BASE_URL } from '@env';
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import * as Font from 'expo-font';
 import React  from 'react';
@@ -21,6 +22,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import GameScreen from './screens/GameScreen';
 import AccountScreen from './screens/AccountScreen';
+import CashierHomeScreen from './screens/CashierHomeScreen';
 import CouponScreen from './screens/CouponScreen';
 import DonutShopScreen from './screens/DonutShopScreen';
 import CoffeeShopScreen from './screens/CoffeeShopScreen';
@@ -33,7 +35,7 @@ const HomeStackScreen = () => {
   return(
   <HomeStack.Navigator>
     <HomeStack.Screen name="HomeScreen" component={HomeScreen} 
-      options={{ headerShown: false, animationEnabled: false }} />
+      options={{ headerShown: false, animationEnabled: false }}/>
     <HomeStack.Screen name="Coupons" component={CouponScreen} 
       options={{ animationEnabled: false }}/>
     <HomeStack.Screen name="DonutShop" component={DonutShopScreen} 
@@ -41,7 +43,7 @@ const HomeStackScreen = () => {
     <HomeStack.Screen name="CoffeeShop" component={CoffeeShopScreen} 
       options={{ title:"Coffee", animationEnabled: false }}/>
     <HomeStack.Screen name="AboutRewards" component={AboutRewardsScreen} 
-      options={{ title:"About Rewards", animationEnabled: false }} />
+      options={{ title:"About Rewards", animationEnabled: false }}/>
   </HomeStack.Navigator>
   )
 }
@@ -60,6 +62,7 @@ const AuthStackScreen = () => {
   )
 }
 
+// Bottom Tab Navigator for CUSTOMER users
 const Tabs = createBottomTabNavigator()
 const TabsScreen = () => {
   return (
@@ -91,16 +94,30 @@ const TabsScreen = () => {
   )
 }
 
+const CashierHomeStack = createStackNavigator()
+const CashierHomeStackScreen = () => {
+  return(
+  <CashierHomeStack.Navigator>
+    <CashierHomeStack.Screen name="CashierHomeScreen" component={CashierHomeScreen} 
+      options={{ headerShown: false}}/>
+  </CashierHomeStack.Navigator>
+  )
+}
+
 const RootStack = createStackNavigator()
 const RootStackScreen = () => {
   return (
     <CredentialsContext.Consumer>
       {({storedCredentials, setStoredCredentials}) => (
         <RootStack.Navigator>
-        {/* If there are storedCredentials (already logged in) render
-          main app Tab Navigation Screens else render Authentication Stack*/}
+        {/* If there are storedCredentials (already logged in) check user role and to determine stack rendered, 
+        else render AuthStack */}
         { storedCredentials ? (
-          <RootStack.Screen name='App' component={TabsScreen} options={{headerShown: false}}/>
+          (storedCredentials.role === "cashier") ? (
+            <RootStack.Screen name='CashierApp' component={CashierHomeStackScreen} options={{headerShown: false}}/>
+          ) : (
+            <RootStack.Screen name='App' component={TabsScreen} options={{headerShown: false}}/>
+          )
         ) : (
           <RootStack.Screen name='Auth' component={AuthStackScreen} options={{headerShown: false}}/>
         )}
@@ -182,8 +199,10 @@ export default function App() {
   RUNS ON APP LOADING SCREEN */
   const checkLoginCreds = async () => {
     try {
-      const creds = await AsyncStorage.getItem('cocoAppCredentials')
-      if (creds != null && creds.id != null) {
+      // const creds = await AsyncStorage.getItem('cocoAppCredentials')
+      const creds = await SecureStore.getItemAsync('test')
+
+      if (creds && creds.id != null) {
 
         console.log(creds.id)
 
@@ -202,10 +221,10 @@ export default function App() {
           console.error(err)
         }        
 
-        console.log("Credentials in AsyncStorage found, will presist login with credentials: " + updatedCreds + '\n')
+        console.log("Credentials in SecureStore found, will presist login with credentials: " + updatedCreds + '\n')
         setStoredCredentials(updatedCreds)
       } else {
-        console.log("No credentials in AsyncStorage found")
+        console.log("No credentials in SecureStore found")
         setStoredCredentials(null)
       }
     } catch (err) {

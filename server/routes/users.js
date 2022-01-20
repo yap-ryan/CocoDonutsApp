@@ -80,6 +80,7 @@ router.get('/email/:email', async (req,res) => {
 
 
 // Handle Signup Post requests
+// NOTE: Only used to create new CUSTOMER accounts, cashier accounts created manually
 router.post('/signup', async (req,res) => {
     let {name, email, phone, birthday, password} = req.body
 
@@ -143,13 +144,16 @@ router.post('/signup', async (req,res) => {
                             birthday: new Date(birthday),
                             password: hashedPassword,
                             points: 0,
-                            coupons: []
+                            coupons: [],
+                            role: 'customer'
                         }
                     )
 
                     // Save new user to db
                     try{    
                         const result = await newUser.save()
+
+                        delete result.password
 
                         res.json({
                             status: 'SUCCESS',
@@ -182,6 +186,7 @@ router.post('/signup', async (req,res) => {
 })
 
 // Handle Login Post Requests
+// CUSTOMER & CASHIER/ADMIN ACCOUNTS
 router.post('/login', async (req,res) => {
     let {email, password} = req.body
 
@@ -213,7 +218,8 @@ router.post('/login', async (req,res) => {
                             phone: user[0].phone,
                             birthday: user[0].birthday,
                             points: user[0].points,
-                            coupons: user[0].coupons
+                            coupons: user[0].coupons,
+                            role: user[0].role
                         }
 
                         res.json({
@@ -243,7 +249,6 @@ router.post('/login', async (req,res) => {
                     message: "Email entered does not exist"
                 })
                 console.log('Server Error: Email entered does not exist')
-
             }
 
         } catch (err) {
