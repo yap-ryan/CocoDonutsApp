@@ -181,7 +181,7 @@ function SignUpScreen({ navigation }) {
               autoCapitalize='none'
             />
             <MyTextInput
-              placeholder="Birthday (for rewards!)"
+              placeholder="Birthday"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('birthday')}
               onBlur={handleBlur('birthday')}

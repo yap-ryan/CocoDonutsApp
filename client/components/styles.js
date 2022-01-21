@@ -126,7 +126,7 @@ export const RightIcon = styled.TouchableOpacity`
 `;
 
 export const StyledButton = styled.TouchableOpacity`
-  padding: 15px;
+  padding-horizontal: 15px;
   background-color: ${brand};
   justify-content: center;
   align-items: center;
