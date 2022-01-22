@@ -160,11 +160,11 @@ function LoginScreen({ navigation }) {
 
 const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
     return (
-      <View>
+      <View style={{marginVertical: 4}}>
         <LeftIcon>
           <Ionicons name={icon} size={30} color='black' />
         </LeftIcon>
-        <StyledInputLabel>{label}</StyledInputLabel>
+        {/* <StyledInputLabel>{label}</StyledInputLabel> */}
         <StyledTextInput {...props} />
         {isPassword && (
           <RightIcon

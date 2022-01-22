@@ -49,7 +49,7 @@ function CashierHomeScreen() {
     const [customerInfo, setCustomerInfo] = React.useState(null)
 
     return (
-        <KeyboardAvoidingWrapper>
+        <KeyboardAvoidingWrapper withoutScroll={true}>
         <StyledContainer>
             <View style={styles.container}>
 
@@ -105,7 +105,6 @@ function CashierHomeScreen() {
                     </View>
                 </View>
                 
-
                 <View style={{ height: 145 }}/>
 
                 <StyledButton onPress={() => navigation.push('CoffeeShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
@@ -124,7 +123,7 @@ function CashierHomeScreen() {
 const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
     return (
       <View>
-        <LeftIcon>
+        <LeftIcon style={{top:36}}>
           <Ionicons name={icon} size={30} color='black' />
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>

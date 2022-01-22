@@ -101,7 +101,7 @@ export const StyledTextInput = styled.TextInput`
 
 export const StyledInputLabel = styled.Text`
   color: #242a3a;
-  font-size: 13px;
+  font-size: 14px;
   text-align: left;
   fontFamily: DMSans-Regular;
   height: 18px;
@@ -109,7 +109,7 @@ export const StyledInputLabel = styled.Text`
 
 export const LeftIcon = styled.View`
   left: 15px;
-  top: 35px;
+  top: 17.5px;
   position: absolute;
   z-index: 1;
   ${(props) =>
@@ -121,7 +121,7 @@ export const LeftIcon = styled.View`
 
 export const RightIcon = styled.TouchableOpacity`
   right: 15px;
-  top: 36px;
+  top: 17.5px;
   position: absolute;
   z-index: 1;
 `;

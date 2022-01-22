@@ -9,7 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { StatusBar } from 'expo-status-bar';
 // Datetimepicker
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { CredentialsContext } from '../components/CredentialsContext';
 import KeyboardAvoidingWrapper from './../components/KeyboardAvoidingWrapper';
@@ -43,7 +43,7 @@ function SignUpScreen({ navigation }) {
     const [messageType, setMessageType] = React.useState()
     const {setStoredCredentials} = React.useContext(CredentialsContext)
 
-    // Date (of Birth)
+    // Date being displayed on DateTimePicker
     const [date, setDate] = React.useState(new Date());
     // State to show/hide date selector 
     const [show, setShow] = React.useState(false);
@@ -51,16 +51,17 @@ function SignUpScreen({ navigation }) {
     const [dob, setDob] = React.useState();
 
     // Handles when DateTimePicker changes
-    const onChange = (event, selectedDate) => {
-      const currentDate = selectedDate || date;
-      setShow(false);
-      setDate(currentDate);
-      setDob(currentDate);
-    };
+    const onConfirm = (selectedDate) => {
+      const currentDate = selectedDate || date
+      setShow(false)
+      setDate(currentDate)
+      setDob(currentDate)
+    }
 
     const showDatePicker = () => {
-      setShow('date');
-    };
+      console.log("SHOW DATE PICKER")
+      setShow(true)
+    }
 
     // Function to handle signup (tell backend to record new user to backend)
     const handleSignup = async (credentials, setSubmitting) => {
@@ -113,19 +114,20 @@ function SignUpScreen({ navigation }) {
     <StyledContainer>
     <InnerContainer>
 
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            is24Hour={true}
-            display="default"
-            onChange={onChange}
-            style={{
-              backgroundColor: 'yellow',
-            }}
-          />
-        )}
+      { show && 
+        <DateTimePickerModal
+          isVisible={true}
+          date={date}
+          mode="date"
+          // is24Hour={true}
+          onConfirm={onConfirm}
+          onCancel={() => setShow(false)}
+          // style={{
+          //   width: 700
+          // }}
+        />
+      }
+
 
       <Formik
         initialValues={{ name: '', email: '', phone: '', birthday: '', password: '', confirmPassword: '' }}
@@ -247,19 +249,19 @@ function SignUpScreen({ navigation }) {
 
 const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, isDate, showDatePicker, ...props }) => {
     return (
-      <View>
+      <View style={{marginVertical: 4}}>
         <LeftIcon>
-          {/* <Octicons name={icon} size={30} color='black' /> */}
           <Ionicons name={icon} size={30} color='black' />
         </LeftIcon>
-        <StyledInputLabel>{label}</StyledInputLabel>
+        {/* <StyledInputLabel>{label}</StyledInputLabel> */}
 
-        {isDate && (
+        {isDate ? (
           <TouchableOpacity onPress={showDatePicker}>
-            <StyledTextInput {...props} />
+            <StyledTextInput onPressOut={showDatePicker} {...props} />
           </TouchableOpacity>
-        )}
-        {!isDate && <StyledTextInput {...props} />}
+          ) : 
+          <StyledTextInput {...props} />
+        }        
 
         {isPassword && (
           <RightIcon

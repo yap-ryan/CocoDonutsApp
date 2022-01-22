@@ -3,6 +3,7 @@
     "name": "CocoDonutsApp",
     "slug": "CocoDonutsApp",
     "version": "1.0.0",
+    "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "icon": "./client/assets/cocoicon1024.png",
     "splash": {

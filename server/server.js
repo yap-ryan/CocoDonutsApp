@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const mongoSanitize = require('express-mongo-sanitize');
  
 const PORT = process.env.PORT || 9000
 const MONGODB_URI = process.env.MONGODB_URI
@@ -18,6 +19,7 @@ db.once('open', () => { console.log('Mongo DB Connected...') })
 
 // Telling express app that we are accepting json
 app.use(express.json())  
+app.use(mongoSanitize())
 
 // Router for users route
 const usersRouter = require('./routes/users')

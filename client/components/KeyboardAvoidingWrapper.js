@@ -7,12 +7,16 @@ import { KeyboardAvoidingView, Keyboard, ScrollView, TouchableWithoutFeedback } 
 import { Colors } from './../components/styles';
 const { primary } = Colors;
 
-const KeyboardAvoidingWrapper = ({ children }) => {
+const KeyboardAvoidingWrapper = ({ withoutScroll, children }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: primary }}>
-      <ScrollView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>{children}</TouchableWithoutFeedback>
-      </ScrollView>
+      { withoutScroll ? 
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>{children}</TouchableWithoutFeedback>
+          :
+          <ScrollView>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>{children}</TouchableWithoutFeedback>
+          </ScrollView>
+      }
     </KeyboardAvoidingView>
   );
 };

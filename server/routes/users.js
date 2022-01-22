@@ -110,10 +110,10 @@ router.post('/signup', async (req,res) => {
             status: 'ERROR',
             message: 'Invalid phone number entered'
         })
-    } else if (! /^(?!.*[$ ]).{7,20}$/.test(password)) {
+    } else if (! /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(password)) {
         res.json({
             status: 'ERROR',
-            message: 'Password must be 7-20 chracters long, and contain no $ or spaces'
+            message: 'Password must use upper and lower case letters, have at least 1 number, and be at least 8 chracters'
         })
     } else {
         // Check if email and phone already being used before posting
