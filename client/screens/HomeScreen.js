@@ -17,8 +17,17 @@ function HomeScreen({ navigation }) {
     const {storedCredentials} = React.useContext(CredentialsContext)
     console.log('Stored Credentials: ' + JSON.stringify(storedCredentials) + '\n')
 
-    const isFocused = useIsFocused()
+        
+    // Used to prevent multiple presses of same buttom in quick succession (leading to multiple screens pushed on stack)
+    const [buttonPressed, setButtonPressed] = React.useState(false)
+    React.useEffect(() => {
+      setTimeout(() => {
+          setButtonPressed(false)
+      }, 10)
+    }, [buttonPressed])
 
+
+    const isFocused = useIsFocused()
     React.useEffect(() => {
         // USED TO CAUSE RERENDER(& therefore update storedCredentials) WHEN WE NAVIGATE(or 'Focus') BACK TO HOME SCREEN
         // IE. If user redeems a coupon on the DonutShopScreen and comes back, we need to updated the user's points displayed
@@ -40,32 +49,61 @@ function HomeScreen({ navigation }) {
         <View style={styles.contentContainer}>
 
             <View style={styles.innerContentContainer}>
+                { buttonPressed === false ?
+                    <>
+                        <StyledButton onPress={() => navigation.push('Coupons')} onPressOut={() => setButtonPressed(true)} style={styles.button}>
+                            <ButtonText style={styles.text}>My Coupons</ButtonText>
+                        </StyledButton>
+                        
+                        <View style={{ height: 5 }}>
+                        </View>
 
+                        <StyledButton onPress={() => navigation.push('DonutShop')} onPressOut={() => setButtonPressed(true)} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                            <ButtonText style={styles.secondaryText}>Donuts</ButtonText>
+                        </StyledButton>
+                        
+                        <View style={{ height: 5 }}>
+                        </View>
 
-                <StyledButton onPress={() => navigation.push('Coupons')} style={styles.button}>
-                    <ButtonText style={styles.text}>My Coupons</ButtonText>
-                </StyledButton>
+                        <StyledButton onPress={() => navigation.push('CoffeeShop')} onPressOut={() => setButtonPressed(true)} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                            <ButtonText style={styles.secondaryText}>Coffee</ButtonText>
+                        </StyledButton>
+                        
+                        <View style={{ height: 5 }}>
+                        </View>
 
-                <View style={{ height: 5 }}>
-                </View>
+                        <StyledButton onPress={() => navigation.push('AboutRewards')} onPressOut={() => setButtonPressed(true)} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                            <ButtonText style={styles.secondaryText}>Learn about Coco Donuts Rewards</ButtonText>
+                        </StyledButton>
+                    </>
+                    :
+                    <>
+                        <StyledButton disabled={true} style={styles.button}>
+                            <ButtonText style={styles.text}>My Coupons</ButtonText>
+                        </StyledButton>
+                        
+                        <View style={{ height: 5 }}>
+                        </View>
 
-                <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
-                    <ButtonText style={styles.secondaryText}>Donuts</ButtonText>
-                </StyledButton>
-                
-                <View style={{ height: 5 }}>
-                </View>
+                        <StyledButton disabled={true} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                            <ButtonText style={styles.secondaryText}>Donuts</ButtonText>
+                        </StyledButton>
+                        
+                        <View style={{ height: 5 }}>
+                        </View>
 
-                <StyledButton onPress={() => navigation.push('CoffeeShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
-                    <ButtonText style={styles.secondaryText}>Coffee</ButtonText>
-                </StyledButton>
-                
-                <View style={{ height: 5 }}>
-                </View>
+                        <StyledButton disabled={true} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                            <ButtonText style={styles.secondaryText}>Coffee</ButtonText>
+                        </StyledButton>
+                        
+                        <View style={{ height: 5 }}>
+                        </View>
 
-                <StyledButton onPress={() => navigation.push('AboutRewards')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
-                    <ButtonText style={styles.secondaryText}>Learn about Coco Donuts Rewards</ButtonText>
-                </StyledButton>
+                        <StyledButton disabled={true} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                            <ButtonText style={styles.secondaryText}>Learn about Coco Donuts Rewards</ButtonText>
+                        </StyledButton>
+                    </>
+                }        
 
             </View>
         </View>  

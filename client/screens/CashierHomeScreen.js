@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 225
+        marginVertical: 250
     },
     icon: {
         marginRight: 14,
