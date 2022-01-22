@@ -51,45 +51,60 @@ function CashierHomeScreen() {
     return (
         <KeyboardAvoidingWrapper>
         <StyledContainer>
-        <InnerContainer>
             <View style={styles.container}>
 
-                <View style={[styles.rowContainer, { width: '78%' }]}>
-                    <MyTextInput
-                        label="Customer Identification"
-                        placeholder="example@gmail.com"
-                        placeholderTextColor={darkLight}
-                        onChangeText={(text) => setInputField(text)}
-                        value={inputField}
-                        keyboardType={searchBy === 'phone' ? 'phone-pad':''}
-                        icon="person-outline"
-                        autoCapitalize='none'
-                        style={styles.textInput}
-                    />
-                    
-                    <View style={{ width: 6 }}/>
-
-                    <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: brand, top: 5}]}>
-                        <Icon name="arrow-forward" size={30} color={'white'}/>
-                        {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
-                    </StyledButton>      
-                </View>
-
-                <View style={{ height: 22 }}/>
-
-                <View style={[styles.rowContainer, {alignSelf: 'flex-start'}]}>
-                    <View style={styles.searchByContainer}>
-                        <View style={styles.searchByInitialContainer}>
-                            <ButtonText style={styles.secondaryText}>Search by:</ButtonText>
+                <View style={styles.searchContainerOuter}>
+                    <View style={styles.rowContainer}>
+                        <View style={styles.textInputContainer}>
+                            {searchBy === 'phone' ? 
+                                <MyTextInput
+                                    label="Customer Identification"
+                                    placeholder="example@gmail.com"
+                                    placeholderTextColor={darkLight}
+                                    onChangeText={(text) => setInputField(text)}
+                                    value={inputField}
+                                    keyboardType={'phone-pad'}
+                                    icon="person-outline"
+                                    autoCapitalize='none'
+                                    style={styles.textInput}
+                                />
+                                :
+                                <MyTextInput
+                                    label="Customer Identification"
+                                    placeholder="example@gmail.com"
+                                    placeholderTextColor={darkLight}
+                                    onChangeText={(text) => setInputField(text)}
+                                    value={inputField}
+                                    icon="person-outline"
+                                    autoCapitalize='none'
+                                    style={styles.textInput}
+                                />
+                            }
                         </View>
-                        <TouchableOpacity style={ searchBy === 'phone' ? styles.searchBySelected : styles.searchByUnselected} onPress={() => setSearchBy('phone')}>
-                            <ButtonText style={styles.secondaryText}>Phone</ButtonText>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={ searchBy === 'email' ? styles.searchBySelected : styles.searchByUnselected} onPress={() => setSearchBy('email')}>
-                            <ButtonText style={styles.secondaryText}>Email</ButtonText>
-                        </TouchableOpacity>
-                    </View>       
+
+                        <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: brand, top: 5.5}]}>
+                            <Icon name="arrow-forward" size={30} color={'white'}/>
+                            {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
+                        </StyledButton>      
+                    </View>
+
+                    <View style={{ height: 22 }}/>
+
+                    <View style={[styles.rowContainer]}>
+                        <View style={[styles.searchByContainer]}>
+                            <View style={styles.searchByInitialContainer}>
+                                <ButtonText style={styles.secondaryText}>Search by:</ButtonText>
+                            </View>
+                            <TouchableOpacity style={ searchBy === 'phone' ? styles.searchBySelected : styles.searchByUnselected} onPress={() => setSearchBy('phone')}>
+                                <ButtonText style={styles.secondaryText}>Phone</ButtonText>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={ searchBy === 'email' ? styles.searchBySelected : styles.searchByUnselected} onPress={() => setSearchBy('email')}>
+                                <ButtonText style={styles.secondaryText}>Email</ButtonText>
+                            </TouchableOpacity>
+                        </View>       
+                    </View>
                 </View>
+                
 
                 <View style={{ height: 145 }}/>
 
@@ -101,7 +116,6 @@ function CashierHomeScreen() {
                 </StyledButton>
             </View>
 
-        </InnerContainer> 
         </StyledContainer>
         </KeyboardAvoidingWrapper>
     );
@@ -124,10 +138,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#feadd6',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 60
+        height: 60,
+        marginHorizontal: 0
     },
     container: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 225
@@ -140,16 +154,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 50,
+        width: '100%'
+    },
+    searchContainerOuter: {
+        width: '88%'
     },
     searchByContainer: {
         marginVertical: 5,
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: secondaryButtonColor,
         borderRadius: 5,
         height: 60,
-        width: '85%'
+        width: '100%'
     },
     searchByInitialContainer: {
         paddingHorizontal: 10
@@ -160,7 +179,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         height: 45,
-        paddingHorizontal: 15,
+        paddingHorizontal: '7%',
         marginLeft: 6
     },
     searchByUnselected: {
@@ -168,9 +187,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
         height: 45,
-        paddingHorizontal: 15,
+        paddingHorizontal: '7%',
         marginLeft: 6
-
     },
     secondaryText: {
         fontFamily: 'DMSans-Regular',
@@ -178,7 +196,11 @@ const styles = StyleSheet.create({
         color: secondaryTextColor
     },
     textInput: {
-        paddingRight: 20
+        paddingRight: 20,
+        marginRight: 5
+    },
+    textInputContainer: {
+        width: '82%'
     }
 })
 

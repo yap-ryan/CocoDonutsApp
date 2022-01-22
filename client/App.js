@@ -35,15 +35,14 @@ const HomeStackScreen = () => {
   return(
   <HomeStack.Navigator>
     <HomeStack.Screen name="HomeScreen" component={HomeScreen} 
-      options={{ headerShown: false, animationEnabled: false }}/>
-    <HomeStack.Screen name="Coupons" component={CouponScreen} 
-      options={{ animationEnabled: false }}/>
+      options={{ title:"Home", headerShown: false, animationEnabled: false }}/>
+    <HomeStack.Screen name="Coupons" component={CouponScreen} />
     <HomeStack.Screen name="DonutShop" component={DonutShopScreen} 
-      options={{ title:"Donuts", animationEnabled: false }}/>
+      options={{ title:"Donuts"}}/>
     <HomeStack.Screen name="CoffeeShop" component={CoffeeShopScreen} 
-      options={{ title:"Coffee", animationEnabled: false }}/>
+      options={{ title:"Coffee"}}/>
     <HomeStack.Screen name="AboutRewards" component={AboutRewardsScreen} 
-      options={{ title:"About Rewards", animationEnabled: false }}/>
+      options={{ title:"About Rewards"}}/>
   </HomeStack.Navigator>
   )
 }
