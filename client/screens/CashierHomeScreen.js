@@ -1,6 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from 'react-native-vector-icons';
+
+
 
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import {
@@ -22,8 +25,8 @@ import {
     ExtraText,
     TextLink,
     TextLinkContent,
-    Colors,
-  } from './../components/styles';
+    Colors
+} from './../components/styles';
 
 const { secondaryTextColor, secondaryButtonColor, darkLight, brand } = Colors;
 
@@ -40,6 +43,7 @@ const { secondaryTextColor, secondaryButtonColor, darkLight, brand } = Colors;
 function CashierHomeScreen() {
 
     const [searchBy, setSearchBy] = React.useState('phone')
+    const [inputField, setInputField] = React.useState('')
 
     // Holds current customer info: name, birthday, points, coupons (INCLUDE EMAIL/PHONE? prob not)
     const [customerInfo, setCustomerInfo] = React.useState(null)
@@ -50,7 +54,30 @@ function CashierHomeScreen() {
         <InnerContainer>
             <View style={styles.container}>
 
-                <View style={styles.rowContainer}>
+                <View style={[styles.rowContainer, { width: '78%' }]}>
+                    <MyTextInput
+                        label="Customer Identification"
+                        placeholder="example@gmail.com"
+                        placeholderTextColor={darkLight}
+                        onChangeText={(text) => setInputField(text)}
+                        value={inputField}
+                        keyboardType={searchBy === 'phone' ? 'phone-pad':''}
+                        icon="person-outline"
+                        autoCapitalize='none'
+                        style={styles.textInput}
+                    />
+                    
+                    <View style={{ width: 6 }}/>
+
+                    <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: brand, top: 5}]}>
+                        <Icon name="arrow-forward" size={30} color={'white'}/>
+                        {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
+                    </StyledButton>      
+                </View>
+
+                <View style={{ height: 22 }}/>
+
+                <View style={[styles.rowContainer, {alignSelf: 'flex-start'}]}>
                     <View style={styles.searchByContainer}>
                         <View style={styles.searchByInitialContainer}>
                             <ButtonText style={styles.secondaryText}>Search by:</ButtonText>
@@ -61,17 +88,10 @@ function CashierHomeScreen() {
                         <TouchableOpacity style={ searchBy === 'email' ? styles.searchBySelected : styles.searchByUnselected} onPress={() => setSearchBy('email')}>
                             <ButtonText style={styles.secondaryText}>Email</ButtonText>
                         </TouchableOpacity>
-                    </View>
-
-                    <View style={{ width: 8 }}/>
-
-                    <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: brand}]}>
-                        <Icon name="arrow-forward" size={30} color={'white'}/>
-                        {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
-                    </StyledButton>             
+                    </View>       
                 </View>
 
-                <View style={{ height: 17 }}/>
+                <View style={{ height: 145 }}/>
 
                 <StyledButton onPress={() => navigation.push('CoffeeShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
                     <View style={styles.rowContainer}>
@@ -79,14 +99,25 @@ function CashierHomeScreen() {
                         <ButtonText style={styles.secondaryText}>Scan QR Code</ButtonText>
                     </View>
                 </StyledButton>
-                
-
             </View>
+
         </InnerContainer> 
         </StyledContainer>
         </KeyboardAvoidingWrapper>
     );
 }
+
+const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+    return (
+      <View>
+        <LeftIcon>
+          <Ionicons name={icon} size={30} color='black' />
+        </LeftIcon>
+        <StyledInputLabel>{label}</StyledInputLabel>
+        <StyledTextInput {...props} />
+      </View>
+    );
+  };
 
 const styles = StyleSheet.create({
     button: {
@@ -99,7 +130,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 80
+        marginVertical: 225
     },
     icon: {
         marginRight: 14,
@@ -117,7 +148,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: secondaryButtonColor,
         borderRadius: 5,
-        height: 60
+        height: 60,
+        width: '85%'
     },
     searchByInitialContainer: {
         paddingHorizontal: 10
@@ -128,21 +160,26 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         height: 45,
-        paddingHorizontal: 10
+        paddingHorizontal: 15,
+        marginLeft: 6
     },
     searchByUnselected: {
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
         height: 45,
-        paddingHorizontal: 10
+        paddingHorizontal: 15,
+        marginLeft: 6
+
     },
     secondaryText: {
         fontFamily: 'DMSans-Regular',
         fontSize: 17,
         color: secondaryTextColor
+    },
+    textInput: {
+        paddingRight: 20
     }
-
 })
 
 export default CashierHomeScreen;

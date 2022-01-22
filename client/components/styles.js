@@ -104,6 +104,7 @@ export const StyledInputLabel = styled.Text`
   font-size: 13px;
   text-align: left;
   fontFamily: DMSans-Regular;
+  height: 18px;
 `;
 
 export const LeftIcon = styled.View`
