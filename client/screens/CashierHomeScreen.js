@@ -68,7 +68,7 @@ function CashierHomeScreen() {
             if (status !== 'SUCCESS') {
                 console.log("Failed to find customer")
             } else {
-                setCustomerInfo({...data})
+                setCustomerInfo(data[0])
                 console.log(customerInfo)
             }
 

@@ -49,7 +49,7 @@ router.get('/:id', async (req,res) => {
 // Could return multiple users but SHOULD ONLY RETURN 1 USER
 router.get('/phone/:phone', async (req,res) => {
     try{
-        const user = await User.find({"phone": req.params.phone})
+        const user = await User.findOne({"phone": req.params.phone})
 
         res.json({
             status: 'SUCCESS', message: 'User found', data: user
@@ -67,7 +67,7 @@ router.get('/phone/:phone', async (req,res) => {
 // Could return multiple users but SHOULD ONLY RETURN 1 USER
 router.get('/email/:email', async (req,res) => {
     try{
-        const user = await User.find({"email": req.params.email})
+        const user = await User.findOne({"email": req.params.email})
 
         res.json({
             status: 'SUCCESS', message: 'User found', data: user
