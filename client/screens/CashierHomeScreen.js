@@ -2,9 +2,10 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Ionicons } from 'react-native-vector-icons';
+import axios from 'axios';
 
-
-
+import {HEROKU_BASE_URL} from '@env'
+import { CustomerInfoContext } from '../components/CustomerInfoContext';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import {
     StyledContainer,
@@ -48,7 +49,37 @@ function CashierHomeScreen() {
     // Holds current customer info: name, birthday, points, coupons (INCLUDE EMAIL/PHONE? prob not)
     const [customerInfo, setCustomerInfo] = React.useState(null)
 
+    const handleSearch = async () => {
+
+        let url = HEROKU_BASE_URL + '/users'
+
+        if (searchBy === 'phone') {
+            url = url + '/phone/' + inputField
+        } else {
+            url = url + '/email/' + inputField
+        }
+
+        try {
+            const resp = await axios.get(url)
+  
+            const result = resp.data
+            const {message, status, data} = result
+  
+            if (status !== 'SUCCESS') {
+                console.log("Failed to find customer")
+            } else {
+                setCustomerInfo({...data})
+                console.log(customerInfo)
+            }
+
+          } catch (err) {
+            console.error(err)
+          }
+
+    }
+
     return (
+        <CustomerInfoContext.Provider value={{customerInfo, setCustomerInfo}}>
         <KeyboardAvoidingWrapper withoutScroll={true}>
         <StyledContainer>
             <View style={styles.container}>
@@ -82,7 +113,7 @@ function CashierHomeScreen() {
                             }
                         </View>
 
-                        <StyledButton onPress={() => navigation.push('DonutShop')} style={[styles.button, {backgroundColor: brand, top: 5.5}]}>
+                        <StyledButton onPress={() => handleSearch()} style={[styles.button, {backgroundColor: brand, top: 5.5}]}>
                             <Icon name="arrow-forward" size={30} color={'white'}/>
                             {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
                         </StyledButton>      
@@ -117,6 +148,7 @@ function CashierHomeScreen() {
 
         </StyledContainer>
         </KeyboardAvoidingWrapper>
+        </CustomerInfoContext.Provider>
     );
 }
 

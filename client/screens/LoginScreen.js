@@ -1,5 +1,4 @@
 // Thirdy party imports
-import {HEROKU_BASE_URL} from '@env'
 import React from 'react';
 import { Button, StyleSheet, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
@@ -9,7 +8,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 
-
+import { HEROKU_BASE_URL } from '@env'
 import { CredentialsContext } from '../components/CredentialsContext';
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import {

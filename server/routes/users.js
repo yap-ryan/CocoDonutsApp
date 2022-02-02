@@ -33,7 +33,9 @@ router.get('/:id', async (req,res) => {
         // Find user
         const user = await User.findById(req.params.id)
 
-        res.json(user)
+        res.json({
+            status: 'SUCCESS', message: 'User found', data: user
+        })
         console.log('Get Success')
 
     } catch(err) {
@@ -49,7 +51,9 @@ router.get('/phone/:phone', async (req,res) => {
     try{
         const user = await User.find({"phone": req.params.phone})
 
-        res.json(user)
+        res.json({
+            status: 'SUCCESS', message: 'User found', data: user
+        })
         console.log('Get Success')
 
     } catch(err) {
@@ -65,7 +69,9 @@ router.get('/email/:email', async (req,res) => {
     try{
         const user = await User.find({"email": req.params.email})
 
-        res.json(user)
+        res.json({
+            status: 'SUCCESS', message: 'User found', data: user
+        })
         console.log('Get Success')
 
     } catch(err) {

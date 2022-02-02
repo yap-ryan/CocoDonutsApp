@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native'
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image, StatusBar } from 'react-native';
-// import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from 'react-native';
 
 import { CredentialsContext } from '../components/CredentialsContext';
 import {
@@ -108,6 +107,7 @@ function HomeScreen({ navigation }) {
             </View>
         </View>  
     </>
+    
     );
 }
 
