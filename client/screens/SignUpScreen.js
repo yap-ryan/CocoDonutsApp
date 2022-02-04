@@ -154,7 +154,7 @@ function SignUpScreen({ navigation }) {
       >
         {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
           <StyledFormArea>
-            <MyTextInput
+            <CustomTextInput
               placeholder="Name"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('name')}
@@ -162,7 +162,7 @@ function SignUpScreen({ navigation }) {
               value={values.name}
               icon="person-outline"
             />
-            <MyTextInput
+            <CustomTextInput
               placeholder="Email"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('email')}
@@ -172,7 +172,7 @@ function SignUpScreen({ navigation }) {
               icon="mail-outline"
               autoCapitalize='none'
             />
-            <MyTextInput
+            <CustomTextInput
               placeholder="Phone Number"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('phone')}
@@ -182,7 +182,7 @@ function SignUpScreen({ navigation }) {
               icon="call-outline"
               autoCapitalize='none'
             />
-            <MyTextInput
+            <CustomTextInput
               placeholder="Birthday"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('birthday')}
@@ -193,7 +193,7 @@ function SignUpScreen({ navigation }) {
               isDate={true}
               showDatePicker={showDatePicker}
             />
-            <MyTextInput
+            <CustomTextInput
               placeholder="Password"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('password')}
@@ -205,7 +205,7 @@ function SignUpScreen({ navigation }) {
               hidePassword={hidePassword}
               setHidePassword={setHidePassword}
             />
-            <MyTextInput
+            <CustomTextInput
               placeholder="Confirm Password"
               placeholderTextColor={darkLight}
               onChangeText={handleChange('confirmPassword')}
@@ -247,7 +247,7 @@ function SignUpScreen({ navigation }) {
     );
 }
 
-const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, isDate, showDatePicker, ...props }) => {
+const CustomTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, isDate, showDatePicker, ...props }) => {
     return (
       <View style={{marginVertical: 4}}>
         <LeftIcon>

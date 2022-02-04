@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Ionicons } from 'react-native-vector-icons';
 import axios from 'axios';
@@ -41,16 +41,17 @@ const { secondaryTextColor, secondaryButtonColor, darkLight, brand } = Colors;
  *  - Button to navigate to Scan customer QR Code screen 
  * 
  *  */ 
-function CashierHomeScreen() {
+function CashierHomeScreen({ navigation }) {
 
     const [searchBy, setSearchBy] = React.useState('phone')
     const [inputField, setInputField] = React.useState('')
-
-    // Holds current customer info: name, birthday, points, coupons (INCLUDE EMAIL/PHONE? prob not)
-    const [customerInfo, setCustomerInfo] = React.useState(null)
+    const [isSubmitting, setSubmitting] = React.useState(false)
+    const {customerInfo, setCustomerInfo} = React.useContext(CustomerInfoContext)
 
     const handleSearch = async () => {
 
+        setSubmitting(true)
+        
         let url = HEROKU_BASE_URL + '/users'
 
         if (searchBy === 'phone') {
@@ -68,13 +69,15 @@ function CashierHomeScreen() {
             if (status !== 'SUCCESS') {
                 console.log("Failed to find customer")
             } else {
-                setCustomerInfo(data[0])
-                console.log(customerInfo)
+                setCustomerInfo(data)
+                navigation.push('CashierTransactionScreen')
             }
 
-          } catch (err) {
+            setSubmitting(false)
+
+        } catch (err) {
             console.error(err)
-          }
+        }
 
     }
 
@@ -88,7 +91,7 @@ function CashierHomeScreen() {
                     <View style={styles.rowContainer}>
                         <View style={styles.textInputContainer}>
                             {searchBy === 'phone' ? 
-                                <MyTextInput
+                                <CustomTextInput
                                     label="Customer Identification"
                                     placeholder="example@gmail.com"
                                     placeholderTextColor={darkLight}
@@ -100,7 +103,7 @@ function CashierHomeScreen() {
                                     style={styles.textInput}
                                 />
                                 :
-                                <MyTextInput
+                                <CustomTextInput
                                     label="Customer Identification"
                                     placeholder="example@gmail.com"
                                     placeholderTextColor={darkLight}
@@ -112,11 +115,18 @@ function CashierHomeScreen() {
                                 />
                             }
                         </View>
-
-                        <StyledButton onPress={() => handleSearch()} style={[styles.button, {backgroundColor: brand, top: 5.5}]}>
-                            <Icon name="arrow-forward" size={30} color={'white'}/>
-                            {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
-                        </StyledButton>      
+                        {!isSubmitting && (
+                            <StyledButton onPress={() => handleSearch()} style={[styles.button, {backgroundColor: brand, top: 5.5}]}>
+                                <Icon name="arrow-forward" size={30} color={'white'}/>
+                                {/* <ButtonText style={styles.secondaryText}>Search</ButtonText> */}
+                            </StyledButton>   
+                        )}
+                        {isSubmitting && (
+                            <StyledButton disabled={true} style={[styles.button, {backgroundColor: brand, top: 5.5}]}>
+                                <ActivityIndicator size="large" animating={true} color="white" />
+                            </StyledButton>
+                        )}
+   
                     </View>
 
                     <View style={{ height: 22 }}/>
@@ -138,7 +148,7 @@ function CashierHomeScreen() {
                 
                 <View style={{ height: 145 }}/>
 
-                <StyledButton onPress={() => navigation.push('CoffeeShop')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                <StyledButton onPress={() => navigation.push('QRScanCustomerScreen')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
                     <View style={styles.rowContainer}>
                         <Icon name="qr-code" size={35} color={secondaryTextColor} style={styles.icon}/>
                         <ButtonText style={styles.secondaryText}>Scan QR Code</ButtonText>
@@ -152,7 +162,7 @@ function CashierHomeScreen() {
     );
 }
 
-const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+const CustomTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
     return (
       <View>
         <LeftIcon style={{top:36}}>

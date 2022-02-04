@@ -102,7 +102,7 @@ function LoginScreen({ navigation }) {
             >
                 {({ handleChange, handleBlur, handleSubmit, isSubmitting, values }) => ( 
                 <StyledFormArea>
-                    <MyTextInput
+                    <CustomTextInput
                         placeholder="Email"
                         placeholderTextColor={darkLight}
                         onChangeText={handleChange('email')}
@@ -112,7 +112,7 @@ function LoginScreen({ navigation }) {
                         autoCapitalize='none'
                     />
 
-                    <MyTextInput
+                    <CustomTextInput
                         placeholder="Password"
                         placeholderTextColor={darkLight}
                         onChangeText={handleChange('password')}
@@ -157,7 +157,7 @@ function LoginScreen({ navigation }) {
     );
 }
 
-const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+const CustomTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
     return (
       <View style={{marginVertical: 4}}>
         <LeftIcon>

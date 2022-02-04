@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
 
 
-// 'Stuff I made' imports
+// Client folder imports
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -28,6 +28,9 @@ import DonutShopScreen from './screens/DonutShopScreen';
 import CoffeeShopScreen from './screens/CoffeeShopScreen';
 import AboutRewardsScreen from './screens/AboutRewardsScreen';
 import { CredentialsContext } from './components/CredentialsContext';
+import { CustomerInfoContext } from './components/CustomerInfoContext';
+import CashierTransactionScreen from './screens/CashierTransactionScreen';
+import QRScanCustomerScreen from './screens/QRScanCustomerScreen';
 
 
 const HomeStack = createStackNavigator()
@@ -36,7 +39,8 @@ const HomeStackScreen = () => {
   <HomeStack.Navigator>
     <HomeStack.Screen name="HomeScreen" component={HomeScreen} 
       options={{ title:"Home", headerShown: false, animationEnabled: false }}/>
-    <HomeStack.Screen name="Coupons" component={CouponScreen} />
+    <HomeStack.Screen name="CouponScreen" component={CouponScreen} 
+      options={{ title:"Coupons" }}/>
     <HomeStack.Screen name="DonutShop" component={DonutShopScreen} 
       options={{ title:"Donuts"}}/>
     <HomeStack.Screen name="CoffeeShop" component={CoffeeShopScreen} 
@@ -93,13 +97,21 @@ const TabsScreen = () => {
   )
 }
 
-const CashierHomeStack = createStackNavigator()
-const CashierHomeStackScreen = () => {
+const CashierStack = createStackNavigator()
+const CashierStackScreen = () => {
+
+  // Holds current customer info: name, birthday, points, coupons (INCLUDE EMAIL/PHONE? prob not)
+  const [customerInfo, setCustomerInfo] = React.useState(null)
+
   return(
-  <CashierHomeStack.Navigator>
-    <CashierHomeStack.Screen name="CashierHomeScreen" component={CashierHomeScreen} 
-      options={{ headerShown: false}}/>
-  </CashierHomeStack.Navigator>
+  <CustomerInfoContext.Provider value={{customerInfo, setCustomerInfo}}>
+    <CashierStack.Navigator>
+      <CashierStack.Screen name="CashierHomeScreen" component={CashierHomeScreen} 
+        options={{ headerShown: false}}/>
+      <CashierStack.Screen name="CashierTransactionScreen" component={CashierTransactionScreen} />
+      <CashierStack.Screen name="QRScanCustomerScreen" component={QRScanCustomerScreen} />
+    </CashierStack.Navigator>
+  </CustomerInfoContext.Provider>
   )
 }
 
@@ -114,7 +126,7 @@ const RootStackScreen = () => {
         else render AuthStack */}
         { storedCredentials ? (
           (storedCredentials.role === "cashier") ? (
-            <RootStack.Screen name='CashierApp' component={CashierHomeStackScreen} options={{headerShown: false}}/>
+            <RootStack.Screen name='CashierApp' component={CashierStackScreen} options={{headerShown: false}}/>
           ) : (
             <RootStack.Screen name='App' component={TabsScreen} options={{headerShown: false}}/>
           )
@@ -135,6 +147,7 @@ export default function App() {
   // Authentication and Loading states
   const [appReady, setAppReady] = React.useState(false)
   const [storedCredentials, setStoredCredentials] = React.useState(null)
+
 
   // Cache all assets when loading app initially
   const _cacheAssetsAsync = async () => {

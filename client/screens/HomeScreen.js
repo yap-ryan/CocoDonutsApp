@@ -50,7 +50,7 @@ function HomeScreen({ navigation }) {
             <View style={styles.innerContentContainer}>
                 { buttonPressed === false ?
                     <>
-                        <StyledButton onPress={() => navigation.push('Coupons')} onPressOut={() => setButtonPressed(true)} style={styles.button}>
+                        <StyledButton onPress={() => navigation.push('CouponScreen')} onPressOut={() => setButtonPressed(true)} style={styles.button}>
                             <ButtonText style={styles.text}>My Coupons</ButtonText>
                         </StyledButton>
                         

@@ -142,7 +142,7 @@ function AccountScreen() {
             >
             {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
                 <StyledFormArea>
-                    <MyTextInput
+                    <CustomTextInput
                         label="Name"
                         placeholder="Name"
                         placeholderTextColor={darkLight}
@@ -151,7 +151,7 @@ function AccountScreen() {
                         value={values.name}
                         icon="person-outline"
                     />
-                    <MyTextInput
+                    <CustomTextInput
                         label="Email"
                         placeholder="Email"
                         placeholderTextColor={darkLight}
@@ -162,7 +162,7 @@ function AccountScreen() {
                         icon="mail-outline"
                         autoCapitalize='none'
                     />
-                    <MyTextInput
+                    <CustomTextInput
                         label="Phone Number"
                         placeholder="Phone Number"
                         placeholderTextColor={darkLight}
@@ -173,7 +173,7 @@ function AccountScreen() {
                         icon="call-outline"
                         autoCapitalize='none'
                     />
-                    <MyTextInput
+                    <CustomTextInput
                         label="Birthday (Cannot Change)"
                         placeholder="Birthday"
                         placeholderTextColor={darkLight}
@@ -213,7 +213,7 @@ function AccountScreen() {
     );
 }
 
-const MyTextInput = ({ label, icon, isPassword, hidePassword, isDate, ...props }) => {
+const CustomTextInput = ({ label, icon, isPassword, hidePassword, isDate, ...props }) => {
     return (
       <View style={{ marginTop: 6, marginBottom: 6 }}>
         <LeftIcon top={33}>
