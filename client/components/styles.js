@@ -158,6 +158,7 @@ export const ItemCardPressable = styled.TouchableOpacity`
 export const ButtonText = styled.Text`
   color: ${primary};
   font-size: 16px;
+  fontFamily: DMSans-Regular;
   ${(props) =>
     props.google == true &&
     `

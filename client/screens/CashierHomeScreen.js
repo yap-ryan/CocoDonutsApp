@@ -55,13 +55,16 @@ function CashierHomeScreen({ navigation }) {
         let url = HEROKU_BASE_URL + '/users'
 
         if (searchBy === 'phone') {
-            url = url + '/phone/' + inputField
+            url = url + '/by-phone'
         } else {
-            url = url + '/email/' + inputField
+            url = url + '/by-email'
         }
 
         try {
-            const resp = await axios.get(url)
+            
+            const resp = (searchBy === 'phone') 
+                ? await axios.get(url, {'phone': inputField})
+                : await axios.get(url, {'email': inputField})
   
             const result = resp.data
             const {message, status, data} = result

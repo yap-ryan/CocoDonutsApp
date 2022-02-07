@@ -28,10 +28,13 @@ router.get('/', async (req,res) => {
 })
 
 // Handle Get requests for individual users BY ID
-router.get('/:id', async (req,res) => {
+router.get('/by-id', async (req,res) => {
+
+    let { id } = req.body
+
     try{
         // Find user
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(id)
 
         res.json({
             status: 'SUCCESS', message: 'User found', data: user
@@ -40,43 +43,57 @@ router.get('/:id', async (req,res) => {
 
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Server Error' })
+            status: 'ERROR', message: 'Error finding user by id' })
         console.error(err)
     }
 })
 
 // Handle Get requests for individual users BY PHONE
 // Could return multiple users but SHOULD ONLY RETURN 1 USER
-router.get('/phone/:phone', async (req,res) => {
-    try{
-        const user = await User.findOne({"phone": req.params.phone})
+router.get('/by-phone', async (req,res) => {
 
-        res.json({
-            status: 'SUCCESS', message: 'User found', data: user
-        })
-        console.log('Get Success')
+    let { phone } = req.body
+
+    try{
+        const user = await User.findOne({"phone": phone})
+
+        if (user == null) {
+            res.json({ status: 'ERROR', message: 'Could not find user by phone number' })
+        } else {
+            res.json({
+                status: 'SUCCESS', message: 'User found', data: user
+            })
+            console.log('Get Success')
+        }
 
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Server Error' })
+            status: 'ERROR', message: 'Error finding user by phone number' })
         console.error(err)
     }
 })
 
 // Handle Get requests for individual users BY EMAIL
 // Could return multiple users but SHOULD ONLY RETURN 1 USER
-router.get('/email/:email', async (req,res) => {
-    try{
-        const user = await User.findOne({"email": req.params.email})
+router.get('/by-email/', async (req,res) => {
 
-        res.json({
-            status: 'SUCCESS', message: 'User found', data: user
-        })
-        console.log('Get Success')
+    let { email } = req.body
+
+    try{
+        const user = await User.findOne({"email": email})
+
+        if (user == null) {
+            res.json({ status: 'ERROR', message: 'Could not find user by email' })
+        } else {
+            res.json({
+                status: 'SUCCESS', message: 'User found', data: user
+            })
+            console.log('Get Success')
+        }
 
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Server Error' })
+            status: 'ERROR', message: 'Error finding user user by email' })
         console.error(err)
     }
 })
