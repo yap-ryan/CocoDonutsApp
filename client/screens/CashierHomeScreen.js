@@ -63,14 +63,18 @@ function CashierHomeScreen({ navigation }) {
         try {
             
             const resp = (searchBy === 'phone') 
-                ? await axios.get(url, {'phone': inputField})
+                ? await axios.get(url, JSON.stringify({'phone': inputField}))
                 : await axios.get(url, {'email': inputField})
   
+            console.log(inputField)
+
             const result = resp.data
             const {message, status, data} = result
   
             if (status !== 'SUCCESS') {
                 console.log("Failed to find customer")
+                console.log(message)
+
             } else {
                 setCustomerInfo(data)
                 navigation.push('CashierTransactionScreen')

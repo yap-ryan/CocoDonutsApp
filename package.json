@@ -46,13 +46,9 @@
     "react-native-web": "^0.17.5",
     "styled-components": "^5.3.3"
   },
-  "rnpm": {
-    "assets": [
-      "./app/assets/fonts"
-    ]
-  },
   "devDependencies": {
     "@babel/core": "^7.16.7",
+    "eas-cli": "^0.46.0",
     "expo-cli": "^5.0.3",
     "nodemon": "^2.0.15"
   },

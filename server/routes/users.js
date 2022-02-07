@@ -43,7 +43,7 @@ router.get('/by-id', async (req,res) => {
 
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Error finding user by id' })
+            status: 'ERROR', message: 'Error finding user by id with input: ' + req.body.id })
         console.error(err)
     }
 })
@@ -55,10 +55,10 @@ router.get('/by-phone', async (req,res) => {
     let { phone } = req.body
 
     try{
-        const user = await User.findOne({"phone": phone})
+        const user = await User.findOne({"phone": req.body.phone})
 
         if (user == null) {
-            res.json({ status: 'ERROR', message: 'Could not find user by phone number' })
+            res.json({ status: 'ERROR', message: 'Could not find user by phone number'  })
         } else {
             res.json({
                 status: 'SUCCESS', message: 'User found', data: user
@@ -68,7 +68,7 @@ router.get('/by-phone', async (req,res) => {
 
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Error finding user by phone number' })
+            status: 'ERROR', message: 'Error finding user by phone number with input: ' + req.body.phone })
         console.error(err)
     }
 })
@@ -93,7 +93,7 @@ router.get('/by-email/', async (req,res) => {
 
     } catch(err) {
         res.json({
-            status: 'ERROR', message: 'Error finding user user by email' })
+            status: 'ERROR', message: 'Error finding user user by email with input: ' + req.body.email })
         console.error(err)
     }
 })
