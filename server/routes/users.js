@@ -28,13 +28,13 @@ router.get('/', async (req,res) => {
 })
 
 // Handle Get requests for individual users BY ID
-router.get('/by-id', async (req,res) => {
+router.get('/:id', async (req,res) => {
 
-    let { id } = req.body
+    // let { id } = req.body
 
     try{
         // Find user
-        const user = await User.findById(id)
+        const user = await User.findById(req.params.id)
 
         res.json({
             status: 'SUCCESS', message: 'User found', data: user
@@ -50,12 +50,10 @@ router.get('/by-id', async (req,res) => {
 
 // Handle Get requests for individual users BY PHONE
 // Could return multiple users but SHOULD ONLY RETURN 1 USER
-router.get('/by-phone', async (req,res) => {
-
-    let { phone } = req.body
+router.get('/phone/:phone', async (req,res) => {
 
     try{
-        const user = await User.findOne({"phone": req.body.phone})
+        const user = await User.findOne({"phone": req.params.phone})
 
         if (user == null) {
             res.json({ status: 'ERROR', message: 'Could not find user by phone number'  })
@@ -75,12 +73,10 @@ router.get('/by-phone', async (req,res) => {
 
 // Handle Get requests for individual users BY EMAIL
 // Could return multiple users but SHOULD ONLY RETURN 1 USER
-router.get('/by-email/', async (req,res) => {
-
-    let { email } = req.body
+router.get('/email/:email', async (req,res) => {
 
     try{
-        const user = await User.findOne({"email": email})
+        const user = await User.findOne({"email": req.params.email})
 
         if (user == null) {
             res.json({ status: 'ERROR', message: 'Could not find user by email' })
