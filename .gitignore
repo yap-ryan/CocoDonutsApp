@@ -1,5 +1,7 @@
+# all node_module directories in root and descendent directories
 node_modules/
-.expo/
+
+**/.expo/
 npm-debug.*
 *.jks
 *.p8
@@ -9,7 +11,8 @@ npm-debug.*
 *.orig.*
 web-build/
 
-.env
+**/.env
+
 
 # macOS
 .DS_Store

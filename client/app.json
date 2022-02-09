@@ -5,9 +5,9 @@
     "version": "1.0.0",
     "userInterfaceStyle": "automatic",
     "orientation": "portrait",
-    "icon": "./client/assets/cocoicon1024.png",
+    "icon": "./assets/cocoicon1024.png",
     "splash": {
-      "image": "./client/assets/cocosplash.png",
+      "image": "./assets/cocosplash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
@@ -15,19 +15,22 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*",
+      "assets/donuts/*",
+      "assets/fonts/*"
+
     ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./client/assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./client/assets/favicon.png"
+      "favicon": "./assets/favicon.png"
     },
     "description": "Coco Donuts app for rewards "
   }
