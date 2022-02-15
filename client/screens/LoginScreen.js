@@ -70,7 +70,7 @@ function LoginScreen({ navigation }) {
     const handleMessage = (message, type = 'FAILED') => {
         setMessage(message)
         setMessageType(type)
-      }
+    }
 
     const presistLogin = async (credentials, message, status) => {
       try {

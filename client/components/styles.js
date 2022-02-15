@@ -158,7 +158,7 @@ export const ItemCardPressable = styled.TouchableOpacity`
 export const ButtonText = styled.Text`
   color: ${primary};
   font-size: 16px;
-  fontFamily: DMSans-Regular;
+  font-family: DMSans-Regular;
   ${(props) =>
     props.google == true &&
     `
@@ -169,7 +169,8 @@ export const ButtonText = styled.Text`
 
 export const MsgBox = styled.Text`
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
+  font-family: DMSans-Regular;
   color: ${props => props.type == "SUCCESS" ? green : red};
 `;
 

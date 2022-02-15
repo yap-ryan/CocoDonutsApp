@@ -31,8 +31,9 @@ export default function QRScanCustomerScreen() {
     // What happens when any bar code is scanned
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true)
-
         
+        
+        // ............ CODE HERE
 
         setText(data)
         console.log('Type: ' + type + '\nData: ' + data)
@@ -67,11 +68,14 @@ export default function QRScanCustomerScreen() {
             </View>
             <Text style={styles.maintext}>{text}</Text>
 
-            {scanned && 
-                <StyledButton onPress={() => setScanned(false)} color='tomato' >
-                    <ButtonText>Scan Again</ButtonText>
-                </StyledButton>
-            }
+            <View style={styles.scanAgainContainer}>
+                {scanned &&
+                    <StyledButton onPress={() => setScanned(false)} color='tomato' >
+                        <ButtonText>Scan Again</ButtonText>
+                    </StyledButton>
+                }
+            </View>
+            
             
             {/* <StyledButton onPress={() => setHasPermission(false)}>
                 <ButtonText>Disallow Camera</ButtonText>
@@ -104,6 +108,10 @@ const styles = StyleSheet.create({
         fontFamily: 'DMSans-Regular',
         fontSize: 16
     },
+    scanAgainContainer: {
+        height: 100,
+        width: '50%'
+    }
 
 
 })

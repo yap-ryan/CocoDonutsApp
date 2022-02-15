@@ -46,11 +46,18 @@ function CashierHomeScreen({ navigation }) {
     const [searchBy, setSearchBy] = React.useState('phone')
     const [inputField, setInputField] = React.useState('')
     const [isSubmitting, setSubmitting] = React.useState(false)
+    const [message, setMessage] = React.useState();
+    const [messageType, setMessageType] = React.useState()
     const {customerInfo, setCustomerInfo} = React.useContext(CustomerInfoContext)
 
-    const handleSearch = async () => {
+    const handleMessage = (message, type = 'FAILED') => {
+        setMessage(message)
+        setMessageType(type)
+    }
 
+    const handleSearch = async () => {
         setSubmitting(true)
+        handleMessage(null) //Clear message
         
         let url = HEROKU_BASE_URL + '/users'
 
@@ -70,6 +77,7 @@ function CashierHomeScreen({ navigation }) {
             if (status !== 'SUCCESS') {
                 console.log("Failed to find customer")
                 console.log(message)
+                handleMessage(message, status)
 
             } else {
                 setCustomerInfo(data)
@@ -80,6 +88,7 @@ function CashierHomeScreen({ navigation }) {
 
         } catch (err) {
             console.error(err)
+            handleMessage('A connection error occured. Check network.')
         }
 
     }
@@ -90,12 +99,30 @@ function CashierHomeScreen({ navigation }) {
         <StyledContainer>
             <View style={styles.container}>
 
+                <Text style={styles.title}> Customer Identification </Text>
+                
+                <View style={{ height: 5 }} />
+                    <Line style={{width: '90%'}}/>
+                <View style={{ height: 60 }} />
+
+
+                <StyledButton onPress={() => navigation.push('QRScanCustomerScreen')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
+                    <View style={styles.rowContainer}>
+                        <Icon name="qr-code" size={35} color={secondaryTextColor} style={styles.icon}/>
+                        <ButtonText style={styles.secondaryText}>Scan QR Code</ButtonText>
+                    </View>
+                </StyledButton>
+
+                <View style={{ height: 50 }} />
+                    <Text style={[styles.secondaryText, {fontSize: 18}]}> - OR - </Text>
+                <View style={{ height: 65 }}/>
+
                 <View style={styles.searchContainerOuter}>
                     <View style={styles.rowContainer}>
                         <View style={styles.textInputContainer}>
                             {searchBy === 'phone' ? 
                                 <CustomTextInput
-                                    label="Customer Identification"
+                                    label="Customer Search"
                                     placeholder="example@gmail.com"
                                     placeholderTextColor={darkLight}
                                     onChangeText={(text) => setInputField(text)}
@@ -107,7 +134,7 @@ function CashierHomeScreen({ navigation }) {
                                 />
                                 :
                                 <CustomTextInput
-                                    label="Customer Identification"
+                                    label="Customer Search"
                                     placeholder="example@gmail.com"
                                     placeholderTextColor={darkLight}
                                     onChangeText={(text) => setInputField(text)}
@@ -145,18 +172,13 @@ function CashierHomeScreen({ navigation }) {
                             <TouchableOpacity style={ searchBy === 'email' ? styles.searchBySelected : styles.searchByUnselected} onPress={() => setSearchBy('email')}>
                                 <ButtonText style={styles.secondaryText}>Email</ButtonText>
                             </TouchableOpacity>
-                        </View>       
+                        </View>   
                     </View>
-                </View>
-                
-                <View style={{ height: 145 }}/>
+                    <View style={{ height: 18 }}/>
 
-                <StyledButton onPress={() => navigation.push('QRScanCustomerScreen')} style={[styles.button, {backgroundColor: secondaryButtonColor}]}>
-                    <View style={styles.rowContainer}>
-                        <Icon name="qr-code" size={35} color={secondaryTextColor} style={styles.icon}/>
-                        <ButtonText style={styles.secondaryText}>Scan QR Code</ButtonText>
-                    </View>
-                </StyledButton>
+                    <MsgBox type={messageType}>{message}</MsgBox>    
+
+                </View>
             </View>
 
         </StyledContainer>
@@ -188,7 +210,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 250
+        marginVertical: 80
     },
     icon: {
         marginRight: 14,
@@ -245,6 +267,10 @@ const styles = StyleSheet.create({
     },
     textInputContainer: {
         width: '82%'
+    },
+    title: {
+        fontFamily: 'DMSans-Regular',
+        fontSize: 20
     }
 })
 
